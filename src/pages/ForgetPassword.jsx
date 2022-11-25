@@ -53,7 +53,19 @@ const ForgetPassword = () => {
   return (
     <form className='m-auto' onSubmit={handleSubmit(onSubmit)}>
       <h1 className='text-[64px] text-primary font-normal text-center tracking-wide'>Quên mật khẩu</h1>
-      <p className='text-primary mt-8 tracking-wide text-center'>Giúp bạn truy cập lại vào tài khoản!</p>
+      <p
+        className='text-primary mt-8 tracking-wide text-center'
+        onClick={() =>
+          toast.success("Gửi thành công, vui lòng kiểm tra email của bạn!", {
+            position: "top-right",
+            autoClose: 1000,
+            progress: undefined,
+            theme: "dark",
+          })
+        }
+      >
+        Giúp bạn truy cập lại vào tài khoản!
+      </p>
       <div className='mt-9 flex justify-center'>
         <Input
           width='300px'

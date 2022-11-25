@@ -41,7 +41,7 @@ const Signup = () => {
   // Redirect after registered successfully
   useEffect(() => {
     toast.onChange((payload) => {
-      if (payload.status === "removed") {
+      if (payload.status === "removed" && payload.data.page === "signup") {
         navigate("/");
       }
     });
@@ -59,6 +59,9 @@ const Signup = () => {
               autoClose: 5000,
               progress: undefined,
               theme: "dark",
+              data: {
+                page: "signup",
+              },
             });
           })
           .catch((err) => {

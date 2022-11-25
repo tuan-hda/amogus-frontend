@@ -5,14 +5,24 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import { Link } from "react-router-dom";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+} from "firebase/auth";
 import { auth } from "../firebase";
 import errorMessages from "../utils/errorMessages.json";
+import { AiFillGoogleCircle, AiFillFacebook } from "react-icons/ai";
 
 const validationSchema = yup.object({
   email: yup.string().required(errorMessages.required),
   password: yup.string().required(errorMessages.required),
 });
+
+const googleProvider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
 
 const Login = () => {
   const {
@@ -26,9 +36,8 @@ const Login = () => {
 
   const onSubmit = ({ email, password }) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
+      .then(() => {
+        console.log("Login successfully");
       })
       .catch((error) => {
         console.log(error);
@@ -51,6 +60,16 @@ const Login = () => {
             message: "Lỗi gì đó đã xảy ra",
           });
         }
+      });
+  };
+
+  const thirdPartyLogin = (type) => {
+    signInWithPopup(auth, type === "google" ? googleProvider : facebookProvider)
+      .then(() => {
+        console.log("Login successfully");
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -107,6 +126,34 @@ const Login = () => {
         <Button type='submit' color='success' css={{ width: "100%", maxWidth: "300px" }}>
           Đăng nhập
         </Button>
+      </div>
+
+      <div className='w-[300px] border-t border-gray-400 mt-3 relative left-1/2 -translate-x-1/2'></div>
+
+      <div className='flex justify-center mt-3'>
+        <div className='flex justify-between w-[300px] max-w-full'>
+          <Button
+            color='error'
+            css={{
+              width: "144px",
+              minWidth: 0,
+            }}
+            icon={<AiFillGoogleCircle className='text-lg' />}
+            onClick={() => thirdPartyLogin("google")}
+          >
+            <span className='ml-4'>Google</span>
+          </Button>
+          <Button
+            css={{
+              width: "144px",
+              minWidth: 0,
+            }}
+            icon={<AiFillFacebook className='text-lg' />}
+            onClick={() => thirdPartyLogin("facebook")}
+          >
+            <span className='ml-4'>Facebook</span>
+          </Button>
+        </div>
       </div>
     </form>
   );

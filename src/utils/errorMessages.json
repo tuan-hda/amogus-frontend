@@ -1,0 +1,5 @@
+{
+  "required": "Không được để trống trường này",
+  "password": "Tối thiểu 8 ký tự, ít nhất 1 chữ cái và 1 số",
+  "confirmPassword": "Mật khẩu không trùng khớp"
+}

@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  Navbar,
-  Button,
-  Link,
-  Text,
-  Avatar,
-  Dropdown,
-  Input,
-  useTheme,
-} from "@nextui-org/react";
+import { Navbar, Button, Link, Text, Avatar, Dropdown, Input, useTheme } from "@nextui-org/react";
 import { SearchIcon } from "../assets/SearchIcon";
 import logo from "../assets/logo.png";
 
@@ -43,23 +34,19 @@ const Header = () => {
   };
 
   return (
-    <div>
-      <Navbar isBordered={false} variant="sticky">
+    <div className='sticky top-0 z-10'>
+      <Navbar isBordered={false} variant='sticky'>
         <Navbar.Brand>
-          <Link href="/">
-            <img src={logo} alt="Logo" className="w-10 mr-6" />
-            <Text b hideIn="xs">
+          <Link href='/'>
+            <img src={logo} alt='Logo' className='w-10 mr-6' />
+            <Text b hideIn='xs'>
               GREENSUS
             </Text>
           </Link>
         </Navbar.Brand>
-        <Navbar.Content activeColor={"success"} hideIn="xs" variant={"default"}>
+        <Navbar.Content activeColor={"success"} hideIn='xs' variant={"default"}>
           {navItems.map((nav, i) => (
-            <Navbar.Link
-              onClick={() => handleNavClick(nav.key)}
-              href={nav.href}
-              isActive={currNav === nav.key}
-            >
+            <Navbar.Link key={i} onClick={() => handleNavClick(nav.key)} href={nav.href} isActive={currNav === nav.key}>
               {nav.title}
             </Navbar.Link>
           ))}
@@ -83,9 +70,7 @@ const Header = () => {
           >
             <Input
               clearable
-              contentLeft={
-                <SearchIcon fill="var(--nextui-colors-accents6)" size={16} />
-              }
+              contentLeft={<SearchIcon fill='var(--nextui-colors-accents6)' size={16} />}
               contentLeftStyling={false}
               css={{
                 w: "100%",
@@ -98,7 +83,7 @@ const Header = () => {
                   dflex: "center",
                 },
               }}
-              placeholder="Search..."
+              placeholder='Search...'
             />
           </Navbar.Item>
           {/* <Dropdown placement="bottom-right">
@@ -115,11 +100,11 @@ const Header = () => {
             </Navbar.Item>
           </Dropdown> */}
           <Navbar.Content>
-            <Navbar.Link color="inherit" href="/login">
+            <Navbar.Link color='inherit' href='/login'>
               Login
             </Navbar.Link>
             <Navbar.Item>
-              <Button auto flat as={Link} color={"success"} href="/signup">
+              <Button auto flat as={Link} color={"success"} href='/signup'>
                 Sign Up
               </Button>
             </Navbar.Item>

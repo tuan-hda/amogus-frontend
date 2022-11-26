@@ -27,7 +27,7 @@ const Sidebar = () => {
   const selectedItem = menus[index];
 
   return (
-    <div className='col-span-2 space-y-4'>
+    <div className='space-y-4 sticky top-0'>
       {menus.map(([menuItem, path, icon, icon2], i) => {
         return (
           <SidebarItem
@@ -49,24 +49,41 @@ const Sidebar = () => {
 const SidebarItem = ({ icon, path, children, selectedItem, onClick, icon2 }) => {
   const navigate = useNavigate();
   return (
-    <Button
-      color='success'
-      css={{
-        width: "100%",
-        minWidth: 0,
-      }}
-      onClick={() => {
-        navigate(path);
-        onClick();
-      }}
-      light
-      icon={selectedItem[0] === children ? icon : icon2}
-      size='xl'
-    >
-      <span className={classNames("text-black", selectedItem[0] === children ? "font-medium" : "font-light")}>
-        {children}
-      </span>
-    </Button>
+    <>
+      <div className='lg:block hidden'>
+        <Button
+          color='success'
+          onClick={() => {
+            navigate(path);
+            onClick();
+          }}
+          light
+          icon={selectedItem[0] === children ? icon : icon2}
+          size='xl'
+        >
+          <span className={classNames(" text-black", selectedItem[0] === children ? "font-medium" : "font-light")}>
+            {children}
+          </span>
+        </Button>
+      </div>
+      <div className='lg:hidden'>
+        <Button
+          color='success'
+          rounded
+          css={{
+            minWidth: "0",
+            width: "64px",
+          }}
+          onClick={() => {
+            navigate(path);
+            onClick();
+          }}
+          light
+          icon={selectedItem[0] === children ? icon : icon2}
+          size='xl'
+        ></Button>
+      </div>
+    </>
   );
 };
 

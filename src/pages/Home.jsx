@@ -3,7 +3,15 @@ import { Post } from "../components";
 
 const Home = () => {
   return (
-    <div className='flex flex-col items-center'>
+    <div className='space-y-8 flex flex-col items-center'>
+      <Post></Post> <Post></Post>
+      <Post></Post>
+      <Post></Post> <Post></Post>
+      <Post></Post>
+      <Post></Post> <Post></Post>
+      <Post></Post>
+      <Post></Post> <Post></Post>
+      <Post></Post>
       <Post></Post>
       <Post></Post>
       <Post></Post>

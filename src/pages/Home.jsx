@@ -7,7 +7,7 @@ import { auth } from "../firebase";
 const Home = () => {
   return (
     <div className='space-y-8 flex flex-col items-center'>
-      <PostEditor />
+      <PostEditor role='admin' />
       <Post />
       <Post />
       <Post />

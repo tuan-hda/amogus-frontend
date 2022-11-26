@@ -1,15 +1,17 @@
-import { User } from "@nextui-org/react";
+import { User, Input, Dropdown } from "@nextui-org/react";
 import React, { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { IoMdClose } from "react-icons/io";
 import { ref, uploadBytes } from "firebase/storage";
 import PostEditorButtons from "./PostEditorButtons";
 import { storage } from "../firebase";
+import classNames from "classnames";
 
-const PostEditor = ({ type }) => {
+const PostEditor = ({ role }) => {
   const [image, setImage] = useState();
   const [url, setUrl] = useState();
   const [value, setValue] = useState();
+  const [type, setType] = useState("Bài đăng");
 
   const handleUploadImage = (e) => {
     const img = e.target.files[0];
@@ -40,7 +42,7 @@ const PostEditor = ({ type }) => {
           <TextareaAutosize
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder='Viết gì đó'
+            placeholder='Viết gì đó...'
             className='resize-none font-light w-full bg-[#E7E7E7] px-4 py-2 rounded-xl mr-3'
           />
 
@@ -60,6 +62,50 @@ const PostEditor = ({ type }) => {
             </div>
           )}
         </div>
+      </div>
+
+      <div className='text-xs px-3 mt-4 flex items-center justify-end gap-2'>
+        Loại:{" "}
+        <Dropdown>
+          <Dropdown.Trigger
+            css={{
+              minWidth: 0,
+              width: "100px",
+            }}
+          >
+            <Input
+              aria-label='point'
+              placeholder='Điểm'
+              className='cursor-pointer'
+              color='black'
+              css={{
+                minWidth: 0,
+                width: "100px",
+              }}
+              value={type === "post" ? "Bài đăng" : "Hoạt động"}
+              size='sm'
+              readOnly
+            />
+          </Dropdown.Trigger>
+          <Dropdown.Menu aria-label='Static Actions'>
+            <Dropdown.Item key='post' onClick={() => setType("post")}>
+              <p
+                onClick={() => setType("post")}
+                className={classNames(type === "post" && "text-blue-500", "min-w-full")}
+              >
+                Bài đăng
+              </p>
+            </Dropdown.Item>
+            <Dropdown.Item key='activity'>
+              <p
+                onClick={() => setType("activity")}
+                className={classNames(type === "activity" && "text-blue-500", "min-w-full")}
+              >
+                Hoạt động
+              </p>
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
 
       {/* Post buttons */}

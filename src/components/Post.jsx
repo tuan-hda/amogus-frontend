@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Linkify from "react-linkify";
 import { getCommentById } from "../api/post";
+import UserContext from "../utils/UserProvider";
 import Comment from "./Comment";
 import PostButtons from "./PostButtons";
 import PostHeader from "./PostHeader";
 const Post = ({ scrutinize, post }) => {
   const [showComment, setShowComment] = useState(false);
   const [comments, setComments] = useState([]);
+
+  const { user: user2 } = useContext(UserContext);
 
   const {
     user,
@@ -66,7 +69,7 @@ const Post = ({ scrutinize, post }) => {
           <PostButtons shares={shares} likes={likes} id={_id} />
 
           <div className='pt-1'>
-            <Comment postId={_id} fetchComment={fetchComment} />
+            {user2 && <Comment postId={_id} fetchComment={fetchComment} />}
 
             {comments.length !== 0 && (
               <div className='ml-4 mt-1 cursor-pointer text-sm' onClick={() => setShowComment(!showComment)}>

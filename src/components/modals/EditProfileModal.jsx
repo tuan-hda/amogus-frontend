@@ -22,7 +22,7 @@ const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
     ava: "",
   });
   const [loading, setLoading] = useState(false);
-  const { value, reset, bindings } = useInput("");
+  const { value, bindings } = useInput("");
 
   // Handle when user update photo
   const handlePhotoChange = (e) => {
@@ -54,11 +54,19 @@ const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
   };
 
   const updateProfile = async (photoUrl) => {
+    if (photoUrl === "") {
+      if (ava) photoUrl = ava;
+      else photoUrl=""
+    }
+    let nameField = value;
+    if (nameField==='') {
+      if (name) nameField=name;
+    }
     try {
       onAuthStateChanged(auth, (userCredential) => {
         if (userCredential) {
           auth.currentUser.getIdToken().then((token) => {
-            editProfile(token, value, photoUrl)
+            editProfile(token, nameField, photoUrl)
               .then((result) => {
                 // setUser({
                 //   ...auth.currentUser,
@@ -69,6 +77,7 @@ const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
               .finally(() => {
                 closeHandler();
                 setLoading(false);
+                window.location.reload();
               });
           });
         } else {
@@ -91,26 +100,20 @@ const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
 
   const handleSubmit = (e) => {
     setLoading(true);
-    if (image) handleUploadImage();
-    else updateProfile(detail.ava);
+    updateProfile(detail.ava);
   };
-
-  useEffect(() => {
-    console.log(name);
-  }, []);
 
   return (
     <Modal
       width="600px"
-      height
+      height="600px"
       closeButton
       aria-labelledby="modal-title"
       open={visible}
-      onClose={closeHandler}>
+      onClose={closeHandler}
+    >
       {loading ? (
-        <div className="w-full h-[350px] flex-col items-center mt-[175px]">
-          <Loading />
-        </div>
+        <Loading />
       ) : (
         <div>
           <Modal.Header>
@@ -120,11 +123,14 @@ const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
           </Modal.Header>
           <Modal.Body>
             <div
-              className={`relative flex justify-center items-center w-[160px] mx-auto`}>
+              className={`relative flex justify-center items-center w-[160px] mx-auto`}
+            >
               <img
                 src={
                   detail.ava
                     ? detail.ava
+                    : ava
+                    ? ava
                     : "http://cdn.onlinewebfonts.com/svg/img_264570.png"
                 }
                 alt="Avatar"
@@ -133,7 +139,8 @@ const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
               <>
                 <label
                   htmlFor="photo"
-                  className="absolute bg-black opacity-50 hover:bg-black hover:opacity-20 cursor-pointer w-[50px] h-[50px] rounded-full flex justify-center items-center ">
+                  className="absolute bg-black opacity-50 hover:bg-black hover:opacity-20 cursor-pointer w-[50px] h-[50px] rounded-full flex justify-center items-center "
+                >
                   <input
                     hidden
                     type="file"
@@ -147,7 +154,7 @@ const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
             </div>
             <Input
               {...bindings}
-              initialValue={"alo"}
+              value={name ? name : detail.name}
               label="Tên"
               clearable
               bordered
@@ -195,7 +202,8 @@ const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
             <Button
               auto
               onClick={() => handleSubmit()}
-              css={{ background: "#108944" }}>
+              css={{ background: "#108944" }}
+            >
               Lưu
             </Button>
           </Modal.Footer>

@@ -22,7 +22,6 @@ const Profile = () => {
   const closeHandler = () => {
     setVisible(false);
     console.log("closed");
-    window.location.reload();
   };
 
   return (

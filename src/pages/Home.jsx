@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import { Post } from "../components";
 
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
+    <div className='flex flex-col items-center'>
+      <Post></Post>
+      <Post></Post>
+      <Post></Post>
+    </div>
+  );
+};
 
-export default Home
+export default Home;

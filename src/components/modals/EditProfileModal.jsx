@@ -4,14 +4,10 @@ import {
   Button,
   Text,
   Input,
-  Row,
-  Checkbox,
   Textarea,
 } from "@nextui-org/react";
-import Avatar from "../Avatar";
 import { storage } from "../../firebase";
 import { v4 } from "uuid";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { TbCameraPlus } from "react-icons/tb";
 
 const EditProfileModal = ({ visible, closeHandler }) => {
@@ -19,12 +15,9 @@ const EditProfileModal = ({ visible, closeHandler }) => {
   const [image, setImage] = useState();
   const [detail, setDetail] = useState({
     name: "",
-    email: "",
-    photo: null,
-    phone: "",
+    about: "",
     address: "",
-    gender: "",
-    dob: "",
+    ava: "",
   });
 
   // Handle when user update photo
@@ -40,6 +33,7 @@ const EditProfileModal = ({ visible, closeHandler }) => {
       }
     };
     reader.readAsDataURL(e.target.files[0]);
+    console.log(reader.result)
   };
 
   const handleUploadImage = () => {
@@ -105,6 +99,14 @@ const EditProfileModal = ({ visible, closeHandler }) => {
       //   setLoadsing(false)
     }
   };
+
+  const handleSubmit = e => {
+    // setLoading(true)
+    e.preventDefault()
+    if (image) handleUploadImage()
+    else updateProfile(detail.photo)
+  }
+
 
   return (
     <Modal
@@ -193,7 +195,7 @@ const EditProfileModal = ({ visible, closeHandler }) => {
         <Button auto flat color="error" onClick={closeHandler}>
           Hủy
         </Button>
-        <Button auto onClick={closeHandler} css={{ background: "#108944" }}>
+        <Button auto onClick={()=>updateProfile()} css={{ background: "#108944" }}>
           Lưu
         </Button>
       </Modal.Footer>

@@ -5,13 +5,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-} from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 import { auth } from "../firebase";
 import errorMessages from "../utils/errorMessages.json";
 import { AiFillGoogleCircle, AiFillFacebook } from "react-icons/ai";
@@ -93,9 +87,7 @@ const Login = () => {
   return (
     <form className='m-auto' onSubmit={handleSubmit(onSubmit)}>
       <h1 className='text-[64px] text-primary font-normal text-center tracking-wide'>Đăng nhập</h1>
-      <p className='text-primary mt-8 tracking-wide text-center' onClick={() => signOut(auth)}>
-        Truy cập vào tài khoản và bắt đầu khám phá!
-      </p>
+      <p className='text-primary mt-8 tracking-wide text-center'>Truy cập vào tài khoản và bắt đầu khám phá!</p>
       <div className='mt-9 flex justify-center'>
         <Input
           width='300px'

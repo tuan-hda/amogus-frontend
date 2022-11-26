@@ -12,7 +12,7 @@ import Signup from "./pages/Signup";
 import UserContext from "./utils/UserProvider";
 
 const App = () => {
-  const { setUser } = useContext(UserContext);
+  const { setUser, setLoading } = useContext(UserContext);
 
   useEffect(() => {
     onAuthStateChanged(auth, (userCredential) => {
@@ -25,10 +25,14 @@ const App = () => {
                 ...result.data[0],
               });
             })
-            .catch((error) => console.log(error));
+            .catch((error) => console.log(error))
+            .finally(() => {
+              setLoading(false);
+            });
         });
       } else {
         console.log("Not signed in");
+        setLoading(false);
       }
     });
   }, []);

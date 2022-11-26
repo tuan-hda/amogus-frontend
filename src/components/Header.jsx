@@ -70,6 +70,7 @@ const Header = () => {
           >
             <Input
               clearable
+              aria-label='search'
               contentLeft={<SearchIcon fill='var(--nextui-colors-accents6)' size={16} />}
               contentLeftStyling={false}
               css={{

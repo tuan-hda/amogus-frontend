@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -34,10 +34,13 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = ({ email, password }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log("Login successfully");
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);

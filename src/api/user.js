@@ -58,4 +58,20 @@ export const editProfile = (token,name,about,address,ava) => {
   });
 }
 
+export const getUserAchievement = (token) => {
+  return new Promise((resolve, reject) => {
+    base
+      .get(
+        "/user/rank",
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+}
+
 export default createUser;

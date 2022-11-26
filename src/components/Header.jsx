@@ -124,8 +124,9 @@ const Header = () => {
                 aria-label="User menu actions"
                 color="success"
                 onAction={(actionKey) => console.log({ actionKey })}
+                disabledKeys={["info"]}
               >
-                <Dropdown.Item key="info" css={{ height: "$18" }}>
+                <Dropdown.Item key="info"  css={{ height: "$18" }} >
                   <Text b color="inherit" css={{ d: "flex" }}>
                     Đã đăng nhập với
                   </Text>

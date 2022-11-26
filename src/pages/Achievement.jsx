@@ -38,7 +38,7 @@ const achievements = [
   },
 ];
 
-const point = 1853;
+const point = 10000;
 
 const Achievement = () => {
   const getAchievementPicture = (title) => {
@@ -66,9 +66,9 @@ const Achievement = () => {
         <h3 className="text-center mb-0 font-semibold">
           Điểm tích lũy
         </h3>
-        <div className="w-[300px] aspect-square flex items-center p-4 mx-auto relative">
+        <div className="w-[350px] aspect-square flex items-center p-4 mx-auto relative">
           <img src={laurelIcon} alt="Laurel" className="w-full" />
-          <p className="text-center text-5xl absolute w-[268px] top-[100px]">
+          <p className="text-center text-5xl absolute w-[318px] top-[120px]">
             {point}
           </p>
         </div>
@@ -99,7 +99,7 @@ const Achievement = () => {
         </div>
       </div>
       <div className="bg-white w-[600px]  rounded-xl p-8 mx-auto mt-8">
-        <h4>Số tiền mà chúng tôi đã quyên góp được từ điểm của bạn</h4>
+        <h4>Số tiền mà chúng tôi đã quyên góp được từ <span className="text-[#13A452]">điểm</span> của bạn</h4>
         <Row justify="center" css={{ mt: 30 }}>
           <img src={moneyIcon} alt="Money" className="w-10 h-10" />
           <p className="text-2xl ml-4">

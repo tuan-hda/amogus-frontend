@@ -1,23 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@nextui-org/react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { CiLocationOn } from "react-icons/ci";
-import { Post } from "../components";
+import { Post,Avatar } from "../components";
+import EditProfileModal from "../components/modals/EditProfileModal";
+import { getProfile } from "../api/user";
 
 const Profile = () => {
+  const [visible, setVisible] = useState(false);
+  const handler = () => setVisible(true);
+
+  const closeHandler = () => {
+    setVisible(false);
+    console.log("closed");
+  };
+
   return (
     <div className="bg-white w-[700px] h-[1100px] rounded-xl  mx-auto">
+      <EditProfileModal visible={visible} closeHandler={()=>closeHandler()}/>
       <div className="relative">
         <img
           src="https://marketplace.canva.com/EAE8OiJn5Uw/1/0/1600w/canva-light-green-orange-illustrative-environment-facebook-cover-wJsZ4lTGp4M.jpg"
           alt="Cover"
           className="rounded-t-xl object-cover object-center h-[250px] w-full"
         />
-        <img
-          src="https://kenh14cdn.com/thumb_w/660/203336854389633024/2022/9/24/tumblr0a490ad7062f51c33ec0c054255256a2a1922eb2540-1664001587930930202526.jpg"
-          alt="Avatar"
-          className="rounded-full w-[180px] aspect-square object-cover absolute -bottom-[90px] left-6"
-        />
+        <Avatar custom={'w-[180px] absolute -bottom-[95px] left-6'}/>
       </div>
       <div className="flex mt-4 ml-[220px] items-center">
         <div>
@@ -27,6 +34,7 @@ const Profile = () => {
         <Button
           bordered
           color={'success'}
+          onClick={()=>handler()}
           css={{ minWidth: "180px" }}
           icon={<AiOutlineEdit />}
           className="mr-6 ml-auto"

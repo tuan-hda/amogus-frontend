@@ -3,29 +3,6 @@ import { Navbar, Button, Link, Text, Avatar, Dropdown, Input, useTheme } from "@
 import { SearchIcon } from "../assets/SearchIcon";
 import logo from "../assets/logo.png";
 
-const navItems = [
-  {
-    key: "1",
-    title: "Tiêu đề",
-    href: "#",
-  },
-  {
-    key: "2",
-    title: "Tiêu đề",
-    href: "#",
-  },
-  {
-    key: "3",
-    title: "Tiêu đề",
-    href: "#",
-  },
-  {
-    key: "4",
-    title: "Tiêu đề",
-    href: "#",
-  },
-];
-
 const Header = () => {
   const [currNav, setNav] = useState("1");
 
@@ -44,13 +21,6 @@ const Header = () => {
             </Text>
           </Link>
         </Navbar.Brand>
-        <Navbar.Content activeColor={"success"} hideIn='xs' variant={"default"}>
-          {navItems.map((nav, i) => (
-            <Navbar.Link key={i} onClick={() => handleNavClick(nav.key)} href={nav.href} isActive={currNav === nav.key}>
-              {nav.title}
-            </Navbar.Link>
-          ))}
-        </Navbar.Content>
 
         <Navbar.Content
           css={{

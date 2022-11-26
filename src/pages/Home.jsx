@@ -21,7 +21,7 @@ const Home = () => {
 
   return (
     <div className='space-y-8 flex flex-col items-center'>
-      <PostEditor role={user?.role} />
+      {user && <PostEditor role={user?.role} />}
 
       {posts.map((p, i) => (
         <Post post={p} key={i} />

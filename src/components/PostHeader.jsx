@@ -14,7 +14,7 @@ const PostHeader = ({ scrutinize, id, name = "", userId = "" }) => {
       </Link>
 
       <Dropdown>
-        <Dropdown.Button light rounded icon={<HiDotsHorizontal className='relative left-[14px] -top-[1px]' />} />
+        <Dropdown.Button light rounded icon={<HiDotsHorizontal className='relative left-[12px] -top-[1px]' />} />
         <Dropdown.Menu aria-label='Static Actions'>
           {scrutinize && (
             <Dropdown.Item key='approve' color='primary'>

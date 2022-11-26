@@ -1,19 +1,34 @@
 import { Tooltip, Button, Dropdown } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { AiFillHeart, AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
 import { IoHandRightSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from "react-share";
+import { joinActivity } from "../api/post";
+import { auth } from "../firebase";
+import UserContext from "../utils/UserProvider";
 
-const PostButtons = ({ shares, likes }) => {
+const PostButtons = ({ shares, likes, id }) => {
   const [liked, setLiked] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
+
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
+
+  const handleClick = (clickFunc) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    clickFunc();
+  };
 
   return (
     <div className='flex gap-4 overflow-hidden pr-4 pl-2 py-1'>
       <div className='flex items-center'>
         <Tooltip content={liked ? "Bỏ quan tâm" : "Quan tâm"} color='invert'>
           <Button
-            onClick={() => setLiked(!liked)}
+            onClick={() => handleClick(() => setLiked(!liked))}
             color='error'
             rounded
             css={{
@@ -75,7 +90,19 @@ const PostButtons = ({ shares, likes }) => {
         }}
         bordered={enrolled}
         icon={<IoHandRightSharp />}
-        onClick={() => setEnrolled(!enrolled)}
+        onClick={() => {
+          handleClick(() => {
+            if (enrolled) {
+              return;
+            }
+            auth.currentUser.getIdToken().then((token) => {
+              joinActivity(token, id).then(() => {
+                console.log("Joined activity successfully");
+                setEnrolled(true);
+              });
+            });
+          });
+        }}
       >
         <span className='ml-8 w-fullk'>{enrolled ? "Huỷ tham gia" : "Tham gia"}</span>
       </Button>

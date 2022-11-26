@@ -45,7 +45,7 @@ const Post = ({ scrutinize, post }) => {
       {/* Post buttons */}
       {!scrutinize && (
         <>
-          <PostButtons shares={shares} likes={likes} />
+          <PostButtons shares={shares} likes={likes} id={_id} />
 
           <div className='pt-1'>
             <Comment />

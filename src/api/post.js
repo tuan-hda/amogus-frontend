@@ -38,8 +38,8 @@ export const getAdminPost = () => {
 export const verifyPost = (token, id, verify) => {
   return new Promise((resolve, reject) => {
     base
-      .put(
-        "/put/verify",
+      .post(
+        "/post/verify",
         { verify },
         {
           params: {
@@ -50,6 +50,39 @@ export const verifyPost = (token, id, verify) => {
           },
         }
       )
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+};
+
+export const joinActivity = (token, id) => {
+  return new Promise((resolve, reject) => {
+    base
+      .post(
+        "/activity/join",
+        {},
+        {
+          headers: {
+            params: {
+              id,
+            },
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+};
+
+export const getCommentById = (portId) => {
+  return new Promise((resolve, reject) => {
+    base
+      .get("/comment", {
+        params: {
+          portId,
+        },
+      })
       .then((response) => resolve(response))
       .catch((error) => reject(error));
   });

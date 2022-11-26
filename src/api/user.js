@@ -36,4 +36,26 @@ export const getProfile = (token) => {
   });
 }
 
+export const editProfile = (token,name,about,address,ava) => {
+  return new Promise((resolve, reject) => {
+    base
+      .post(
+        "/user/editProfile",
+        {
+          name,
+          about,
+          address,
+          ava
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+}
+
 export default createUser;

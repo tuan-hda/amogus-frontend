@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
@@ -11,8 +12,9 @@ const firebaseConfig = {
   appId: "1:688459943514:web:bb60fb6bfc8c89596c9263",
   measurementId: "G-ES0X7S0520",
 };
-
+  
 const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 const auth = getAuth(app);
-export { auth };
+export { auth, storage };

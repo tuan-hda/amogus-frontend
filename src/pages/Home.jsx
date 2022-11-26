@@ -1,23 +1,17 @@
-import { onAuthStateChanged } from "firebase/auth";
-import React from "react";
-import { Post } from "../components";
+import React, { useState } from "react";
 import PostEditor from "../components/PostEditor";
-import { auth } from "../firebase";
+import { Post } from "../components";
 
 const Home = () => {
+  const [posts, setPosts] = useState([]);
+
   return (
     <div className='space-y-8 flex flex-col items-center'>
-      <PostEditor role='admin' />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
+      <PostEditor />
+
+      {posts.map((p, i) => (
+        <Post post={p} />
+      ))}
     </div>
   );
 };

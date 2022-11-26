@@ -19,8 +19,6 @@ const Profile = () => {
     }
   }, [user, loading]);
 
-  console.log(user);
-
   const closeHandler = () => {
     setVisible(false);
     console.log("closed");

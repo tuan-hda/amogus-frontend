@@ -35,7 +35,6 @@ const PostEditor = ({ role }) => {
   return (
     <div className='w-[600px] max-w-[100%] rounded-xl py-4 pl-1 pr-4 bg-white'>
       {/* Content */}
-
       <div className='px-2 pt-2 flex items-start'>
         <User src='https://i.pravatar.cc/150?u=a042581f4e29026704d'></User>
         <div className='flex-1 justify-center -ml-2 '>
@@ -64,49 +63,51 @@ const PostEditor = ({ role }) => {
         </div>
       </div>
 
-      <div className='text-xs px-3 mt-4 flex items-center justify-end gap-2'>
-        Loại:{" "}
-        <Dropdown>
-          <Dropdown.Trigger
-            css={{
-              minWidth: 0,
-              width: "100px",
-            }}
-          >
-            <Input
-              aria-label='point'
-              placeholder='Điểm'
-              className='cursor-pointer'
-              color='black'
+      {role === "admin" && (
+        <div className='text-xs px-3 mt-4 flex items-center justify-end gap-2'>
+          Loại:{" "}
+          <Dropdown>
+            <Dropdown.Trigger
               css={{
                 minWidth: 0,
                 width: "100px",
               }}
-              value={type === "post" ? "Bài đăng" : "Hoạt động"}
-              size='sm'
-              readOnly
-            />
-          </Dropdown.Trigger>
-          <Dropdown.Menu aria-label='Static Actions'>
-            <Dropdown.Item key='post' onClick={() => setType("post")}>
-              <p
-                onClick={() => setType("post")}
-                className={classNames(type === "post" && "text-blue-500", "min-w-full")}
-              >
-                Bài đăng
-              </p>
-            </Dropdown.Item>
-            <Dropdown.Item key='activity'>
-              <p
-                onClick={() => setType("activity")}
-                className={classNames(type === "activity" && "text-blue-500", "min-w-full")}
-              >
-                Hoạt động
-              </p>
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+            >
+              <Input
+                aria-label='point'
+                placeholder='Điểm'
+                className='cursor-pointer'
+                color='black'
+                css={{
+                  minWidth: 0,
+                  width: "100px",
+                }}
+                value={type === "post" ? "Bài đăng" : "Hoạt động"}
+                size='sm'
+                readOnly
+              />
+            </Dropdown.Trigger>
+            <Dropdown.Menu aria-label='Static Actions'>
+              <Dropdown.Item key='post' onClick={() => setType("post")}>
+                <p
+                  onClick={() => setType("post")}
+                  className={classNames(type === "post" && "text-blue-500", "min-w-full")}
+                >
+                  Bài đăng
+                </p>
+              </Dropdown.Item>
+              <Dropdown.Item key='activity'>
+                <p
+                  onClick={() => setType("activity")}
+                  className={classNames(type === "activity" && "text-blue-500", "min-w-full")}
+                >
+                  Hoạt động
+                </p>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      )}
 
       {/* Post buttons */}
       <div className='h-4'></div>

@@ -4,16 +4,23 @@ import Linkify from "react-linkify";
 import Comment from "./Comment";
 import PostButtons from "./PostButtons";
 import PostHeader from "./PostHeader";
-const Post = ({ scrutinize }) => {
+const Post = ({ scrutinize, post }) => {
+  const {
+    user: { name, email },
+    post: { content, image },
+    count: { shares, likes },
+  } = post || { user: {}, post: {}, count: {} };
+
   return (
     <div className='w-[600px] max-w-[100%] rounded-xl py-4 pl-1 pr-4 bg-white'>
       {/* Post header */}
-      <PostHeader scrutinize />
+      <PostHeader scrutinize name={name} email={email} />
 
       {/* Content */}
       <div className='px-4 py-2 font-light'>
         <Linkify>
-          Hello https://www.npmjs.com/package/react-linkify <br /> Tuan
+          {/* {String(content || "hello \n world")
+            .split("\n") */}
         </Linkify>
         <img
           className='rounded-xl mt-2 max-h-[400px] w-full object-contain'

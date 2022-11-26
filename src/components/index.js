@@ -1,4 +1,4 @@
 import Post from "./Post";
 import Sidebar from "./Sidebar";
-
-export { Post, Sidebar };
+import Avatar from "./Avatar";
+export { Post, Sidebar, Avatar };

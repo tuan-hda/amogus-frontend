@@ -2,11 +2,13 @@ import { User, Input, Dropdown } from "@nextui-org/react";
 import React, { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { IoMdClose } from "react-icons/io";
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import PostEditorButtons from "./PostEditorButtons";
 import { auth, storage } from "../firebase";
 import classNames from "classnames";
 import { createPost } from "../api/post";
+import compareDates from "../utils/compareDate";
+import { toast, ToastContainer } from "react-toastify";
 
 const PostEditor = ({ role }) => {
   const [image, setImage] = useState();
@@ -14,6 +16,8 @@ const PostEditor = ({ role }) => {
   const [value, setValue] = useState();
   const [type, setType] = useState("post");
   const [points, setPoints] = useState(0);
+  const [dateStart, setDateStart] = useState("");
+  const [dateEnd, setDateEnd] = useState("");
 
   const handleUploadImage = (e) => {
     const img = e.target.files[0];
@@ -22,17 +26,41 @@ const PostEditor = ({ role }) => {
     setUrl(objUrl);
   };
 
+  const doCreatePost = (url) => {
+    auth.currentUser.getIdToken().then((token) => {
+      createPost(token, value, "", type === "activity", "", url ?? "", dateStart, dateEnd, points)
+        .then(() => {
+          console.log("Create post successfully");
+          toast.success("Đăng bài thành công!");
+        })
+        .catch((error) => console.log(error));
+    });
+  };
+
   const handleSubmit = () => {
-    if (!image || !value) {
-      const storageRef = ref(storage, `avatar/${image.lastModified + image.name}`);
+    if (type === "activity") {
+      if (!dateStart || !dateEnd) {
+        toast.error("Cần chọn ngày bắt đầu và kết thúc");
+        return;
+      }
+
+      if (!compareDates(dateStart, dateEnd)) {
+        toast.error("Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc");
+        return;
+      }
+    }
+
+    if (image || value) {
+      if (!image) {
+        doCreatePost();
+        return;
+      }
+
+      const storageRef = ref(storage, `images/${image.lastModified + image.name}`);
 
       uploadBytes(storageRef, image)
-        .then((snapshot) => {
-          console.log("Uploaded image!");
-
-          // auth.currentUser.getIdToken().then(token => {
-          //   createPost(token, value, '', type==='activity', '', url ?? '', dateStart
-          // })
+        .then(() => {
+          getDownloadURL(storageRef).then((url) => doCreatePost(url));
         })
         .catch((err) => console.log(err));
     }
@@ -69,7 +97,7 @@ const PostEditor = ({ role }) => {
         </div>
       </div>
 
-      {role === "admin" && (
+      {role === "ADMIN" && (
         <div className='text-xs px-3 mt-4 flex items-center justify-end gap-2'>
           Loại:{" "}
           <Dropdown>
@@ -117,7 +145,17 @@ const PostEditor = ({ role }) => {
 
       {/* Post buttons */}
       <div className='h-4'></div>
-      <PostEditorButtons type={type} handleSubmit={handleSubmit} setImage={handleUploadImage} />
+      <PostEditorButtons
+        type={type}
+        points={points}
+        onPoints={(e) => setPoints(e.target.value)}
+        dateStart={dateStart}
+        dateEnd={dateEnd}
+        onDateEnd={(e) => setDateEnd(e.target.value)}
+        onDateStart={(e) => setDateStart(e.target.value)}
+        handleSubmit={handleSubmit}
+        setImage={handleUploadImage}
+      />
     </div>
   );
 };

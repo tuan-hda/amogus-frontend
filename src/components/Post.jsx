@@ -6,10 +6,20 @@ import PostButtons from "./PostButtons";
 import PostHeader from "./PostHeader";
 const Post = ({ scrutinize, post }) => {
   const {
-    user: { name, userId },
+    user,
     post: { content, imageURL },
-    count: { shares, likes },
+    count,
   } = post || { user: {}, post: {}, count: {} };
+
+  let shares, likes, name, userId;
+  if (user) {
+    name = user.name;
+    userId = user.userId;
+  }
+  if (count) {
+    shares = count.share;
+    likes = count.likes;
+  }
 
   const lines = String(content || "").split("\n");
 
@@ -23,13 +33,13 @@ const Post = ({ scrutinize, post }) => {
         <Linkify>
           {lines.map((item, index) => {
             return (
-              <span>
+              <span key={index}>
                 {item} {index < lines.length - 1 && <br />}
               </span>
             );
           })}
         </Linkify>
-        {imageURL && <img className='rounded-xl mt-2 max-h-[400px] w-full object-contain' src={imageURL} alt=''></img>}
+        {imageURL && <img className='rounded-xl mt-2 max-h-[400px] w-full object-cover' src={imageURL} alt=''></img>}
       </div>
 
       {/* Post buttons */}

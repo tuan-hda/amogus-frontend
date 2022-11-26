@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PostEditor from "../components/PostEditor";
 import { Post } from "../components";
 import { getPost } from "../api/post";
+import UserContext from "../utils/UserProvider";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     getPost()
@@ -18,10 +21,10 @@ const Home = () => {
 
   return (
     <div className='space-y-8 flex flex-col items-center'>
-      <PostEditor />
+      <PostEditor role={user?.role} />
 
       {posts.map((p, i) => (
-        <Post post={p} />
+        <Post post={p} key={i} />
       ))}
     </div>
   );

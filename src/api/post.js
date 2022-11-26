@@ -25,3 +25,12 @@ export const createPost = (token, content, title, isActivity, tags, imageURL, da
       .catch((error) => reject(error));
   });
 };
+
+export const getAdminPost = () => {
+  return new Promise((resolve, reject) => {
+    base
+      .get("/post/admin")
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+};

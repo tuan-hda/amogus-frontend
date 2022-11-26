@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { Sidebar } from "../components";
 import Header from "../components/Header";
 
@@ -15,6 +16,7 @@ const MainLayout = () => {
           <Outlet />
         </div>
       </div>
+      <ToastContainer className='z-100' position='top-right' />
     </div>
   );
 };

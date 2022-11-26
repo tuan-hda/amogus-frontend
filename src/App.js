@@ -20,6 +20,7 @@ const App = () => {
         auth.currentUser.getIdToken().then((token) => {
           getProfile(token)
             .then((result) => {
+              console.log(result);
               setUser({
                 ...auth.currentUser,
                 ...result.data[0],
@@ -40,9 +41,9 @@ const App = () => {
   return (
     <Routes>
       <Route element={<AuthLayout />}>
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/forgetpassword' element={<ForgetPassword />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/forgetpassword" element={<ForgetPassword />} />
       </Route>
       <Route element={<MainLayout />}>
         <Route path='/' element={<Home />} />

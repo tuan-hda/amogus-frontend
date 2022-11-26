@@ -27,6 +27,11 @@ const Post = () => {
 
       <div className=' pt-1'>
         <Comment />
+        <Comment
+          type='text'
+          value='Tôi rất thích bài đăng này Tôi rất thích bài đăng này Tôi rất thích bài đăng này Tôi rất thích bài đăng này '
+        />
+        <Comment type='text' value='Siu' />
       </div>
     </div>
   );

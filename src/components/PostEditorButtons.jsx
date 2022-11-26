@@ -2,12 +2,38 @@ import { Tooltip, Button } from "@nextui-org/react";
 import React, { useRef } from "react";
 import { BiImageAlt } from "react-icons/bi";
 
-const PostEditorButtons = ({ setImage, handleSubmit }) => {
+const PostEditorButtons = ({ setImage, handleSubmit, type }) => {
   const ref = useRef();
 
   return (
     <div className='flex gap-4 overflow-hidden pr-4 pl-2 py-1 justify-between'>
-      <Tooltip content={"Ảnh"} color='invert'>
+      <Tooltip content={"Thêm ảnh"} color='invert'>
+        <Button
+          onClick={() => ref.current.click()}
+          color='primary'
+          rounded
+          css={{
+            minWidth: "0",
+          }}
+          light
+          icon={<BiImageAlt className='text-lg' />}
+        />
+      </Tooltip>
+
+      <Tooltip content={"Thêm ngày bắt đầu"} color='invert'>
+        <Button
+          onClick={() => ref.current.click()}
+          color='primary'
+          rounded
+          css={{
+            minWidth: "0",
+          }}
+          light
+          icon={<BiImageAlt className='text-lg' />}
+        />
+      </Tooltip>
+
+      <Tooltip content={"Thêm ngày bắt đầu"} color='invert'>
         <Button
           onClick={() => ref.current.click()}
           color='primary'

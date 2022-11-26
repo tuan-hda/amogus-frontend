@@ -6,7 +6,7 @@ import { ref, uploadBytes } from "firebase/storage";
 import PostEditorButtons from "./PostEditorButtons";
 import { storage } from "../firebase";
 
-const PostEditor = () => {
+const PostEditor = ({ type }) => {
   const [image, setImage] = useState();
   const [url, setUrl] = useState();
   const [value, setValue] = useState();
@@ -64,7 +64,7 @@ const PostEditor = () => {
 
       {/* Post buttons */}
       <div className='h-4'></div>
-      <PostEditorButtons handleSubmit={handleSubmit} setImage={handleUploadImage} />
+      <PostEditorButtons type={type} handleSubmit={handleSubmit} setImage={handleUploadImage} />
     </div>
   );
 };

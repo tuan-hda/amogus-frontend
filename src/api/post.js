@@ -34,3 +34,23 @@ export const getAdminPost = () => {
       .catch((error) => reject(error));
   });
 };
+
+export const verifyPost = (token, id, verify) => {
+  return new Promise((resolve, reject) => {
+    base
+      .put(
+        "/put/verify",
+        { verify },
+        {
+          params: {
+            id,
+          },
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+};

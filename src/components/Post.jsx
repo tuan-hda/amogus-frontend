@@ -7,7 +7,7 @@ import PostHeader from "./PostHeader";
 const Post = ({ scrutinize, post }) => {
   const {
     user,
-    post: { content, imageURL },
+    post: { content, imageURL, _id },
     count,
   } = post || { user: {}, post: {}, count: {} };
 
@@ -26,7 +26,7 @@ const Post = ({ scrutinize, post }) => {
   return (
     <div className='w-[600px] max-w-[100%] rounded-xl py-4 pl-1 pr-4 bg-white'>
       {/* Post header */}
-      <PostHeader scrutinize name={name} userId={userId} />
+      <PostHeader id={_id} scrutinize name={name} userId={userId} />
 
       {/* Content */}
       <div className='px-4 py-2 font-light'>

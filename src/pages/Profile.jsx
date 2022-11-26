@@ -74,7 +74,11 @@ const Profile = () => {
           </Button>
         </div>
       </div>
-      <Post />
+      <div className="bg-[#F5F5F5] pt-4">
+        <div className="mx-auto w-fit">
+          <Post />
+        </div>
+      </div>
     </div>
   );
 };

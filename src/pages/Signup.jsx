@@ -10,6 +10,7 @@ import { auth } from "../firebase";
 import errorMessages from "../utils/errorMessages.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import createUser from "../api/user";
 
 const validationSchema = yup.object({
   email: yup
@@ -67,6 +68,17 @@ const Signup = () => {
           .catch((err) => {
             console.log("Error updating name: ", err);
           });
+
+        userCredential.user.getIdToken().then((token) => {
+          createUser(token, email, name)
+            .then(() => {
+              console.log("Sent create user successfully", name);
+            })
+            .catch((err) => {
+              console.log("Sent create user failed");
+              console.log(err);
+            });
+        });
       })
       .catch((err) => {
         console.log(err);

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -15,6 +15,7 @@ import {
 import { auth } from "../firebase";
 import errorMessages from "../utils/errorMessages.json";
 import { AiFillGoogleCircle, AiFillFacebook } from "react-icons/ai";
+import createUser from "../api/user";
 
 const validationSchema = yup.object({
   email: yup.string().required(errorMessages.required),
@@ -34,10 +35,13 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = ({ email, password }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log("Login successfully");
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
@@ -65,8 +69,21 @@ const Login = () => {
 
   const thirdPartyLogin = (type) => {
     signInWithPopup(auth, type === "google" ? googleProvider : facebookProvider)
-      .then(() => {
+      .then((userCredential) => {
         console.log("Login successfully");
+
+        const email = userCredential.user.email;
+        const name = userCredential.user.displayName;
+        userCredential.user.getIdToken().then((token) => {
+          createUser(token, email, name)
+            .then(() => {
+              console.log("Sent create user successfully", name);
+            })
+            .catch((err) => {
+              console.log("Sent create user failed");
+              console.log(err);
+            });
+        });
       })
       .catch((err) => {
         console.log(err);

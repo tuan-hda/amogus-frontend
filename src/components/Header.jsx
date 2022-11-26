@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Navbar,
-  Button,
-  Link,
-  Text,
-  Avatar,
-  Dropdown,
-  Input,
-  useTheme,
-} from "@nextui-org/react";
-import { useNavigate } from "react-router-dom";
+import { Navbar, Button, Link, Text, Avatar, Dropdown, Input, useTheme } from "@nextui-org/react";
 import { SearchIcon } from "../assets/SearchIcon";
 import logo from "../assets/logo.png";
 
@@ -37,41 +27,26 @@ const navItems = [
 ];
 
 const Header = () => {
-  const navigate = useNavigate();
   const [currNav, setNav] = useState("1");
-  const currentUser = true; 
 
   const handleNavClick = (key) => {
     setNav(key);
   };
 
-  const handleDropDownClick = (actionKey) => {
-    navigate('/'+actionKey);
-  };
-
   return (
-    <div>
-      <Navbar isBordered={false} variant="sticky">
+    <div className='sticky top-0 z-10'>
+      <Navbar isBordered={false} variant='sticky'>
         <Navbar.Brand>
-          <Link href="/">
-            <img src={logo} alt="Logo" className="w-10 mr-6" />
-            <Text b hideIn="xs">
+          <Link href='/'>
+            <img src={logo} alt='Logo' className='w-10 mr-6' />
+            <Text b hideIn='xs'>
               GREENSUS
             </Text>
           </Link>
         </Navbar.Brand>
-        <Navbar.Content
-          enableCursorHighlight
-          activeColor={"success"}
-          hideIn="xs"
-          variant={"default"}
-        >
+        <Navbar.Content activeColor={"success"} hideIn='xs' variant={"default"}>
           {navItems.map((nav, i) => (
-            <Navbar.Link
-              onClick={() => handleNavClick(nav.key)}
-              href={nav.href}
-              isActive={currNav === nav.key}
-            >
+            <Navbar.Link key={i} onClick={() => handleNavClick(nav.key)} href={nav.href} isActive={currNav === nav.key}>
               {nav.title}
             </Navbar.Link>
           ))}
@@ -95,9 +70,8 @@ const Header = () => {
           >
             <Input
               clearable
-              contentLeft={
-                <SearchIcon fill="var(--nextui-colors-accents6)" size={16} />
-              }
+              aria-label='search'
+              contentLeft={<SearchIcon fill='var(--nextui-colors-accents6)' size={16} />}
               contentLeftStyling={false}
               css={{
                 w: "100%",
@@ -110,67 +84,32 @@ const Header = () => {
                   dflex: "center",
                 },
               }}
-              placeholder="Search..."
+              placeholder='Search...'
             />
           </Navbar.Item>
-          {currentUser ? (
-            <Dropdown placement="bottom-right">
-              <Navbar.Item>
-                <Dropdown.Trigger>
-                  <Avatar
-                    bordered
-                    as="button"
-                    color="success"
-                    size="md"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                  />
-                </Dropdown.Trigger>
-              </Navbar.Item>
-              <Dropdown.Menu
-                aria-label="User menu actions"
-                color="success"
-                onAction={(actionKey) => handleDropDownClick(actionKey)}
-                disabledKeys={["info"]}
-              >
-                <Dropdown.Item key="info" css={{ height: "$18" }}>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    Đã đăng nhập với
-                  </Text>
-                  <Text b color="inherit" css={{ d: "flex" }}>
-                    zoey@example.com
-                  </Text>
-                </Dropdown.Item>
-                <Dropdown.Item key="profile" withDivider>
-                  Hồ sơ cá nhân
-                </Dropdown.Item>
-                {/* <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
-                <Dropdown.Item key="analytics" withDivider>
-                  Analytics
-                </Dropdown.Item>
-                <Dropdown.Item key="system">System</Dropdown.Item>
-                <Dropdown.Item key="configurations">
-                  Configurations
-                </Dropdown.Item>
-                <Dropdown.Item key="help_and_feedback" withDivider>
-                  Help & Feedback
-                </Dropdown.Item> */}
-                <Dropdown.Item key="logout" withDivider color="error">
-                  Đăng xuất
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          ) : (
-            <Navbar.Content>
-              <Navbar.Link color="inherit" href="/login">
-                Login
-              </Navbar.Link>
-              <Navbar.Item>
-                <Button auto flat as={Link} color={"success"} href="/signup">
-                  Sign Up
-                </Button>
-              </Navbar.Item>
-            </Navbar.Content>
-          )}
+          {/* <Dropdown placement="bottom-right">
+            <Navbar.Item>
+              <Dropdown.Trigger>
+                <Avatar
+                  bordered
+                  as="button"
+                  color="primary"
+                  size="md"
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                />
+              </Dropdown.Trigger>
+            </Navbar.Item>
+          </Dropdown> */}
+          <Navbar.Content>
+            <Navbar.Link color='inherit' href='/login'>
+              Login
+            </Navbar.Link>
+            <Navbar.Item>
+              <Button auto flat as={Link} color={"success"} href='/signup'>
+                Sign Up
+              </Button>
+            </Navbar.Item>
+          </Navbar.Content>
         </Navbar.Content>
       </Navbar>
     </div>

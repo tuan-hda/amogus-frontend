@@ -4,11 +4,11 @@ import Linkify from "react-linkify";
 import Comment from "./Comment";
 import PostButtons from "./PostButtons";
 import PostHeader from "./PostHeader";
-const Post = () => {
+const Post = ({ scrutinize }) => {
   return (
     <div className='w-[600px] max-w-[100%] rounded-xl py-4 pl-1 pr-4 bg-white'>
       {/* Post header */}
-      <PostHeader />
+      <PostHeader scrutinize />
 
       {/* Content */}
       <div className='px-4 py-2 font-light'>
@@ -23,16 +23,20 @@ const Post = () => {
       </div>
 
       {/* Post buttons */}
-      <PostButtons />
+      {!scrutinize && (
+        <>
+          <PostButtons />
 
-      <div className=' pt-1'>
-        <Comment />
-        <Comment
-          type='text'
-          value='Tôi rất thích bài đăng này Tôi rất thích bài đăng này Tôi rất thích bài đăng này Tôi rất thích bài đăng này '
-        />
-        <Comment type='text' value='Siu' />
-      </div>
+          <div className='pt-1'>
+            <Comment />
+            <Comment
+              type='text'
+              value='Tôi rất thích bài đăng này Tôi rất thích bài đăng này Tôi rất thích bài đăng này Tôi rất thích bài đăng này '
+            />
+            <Comment type='text' value='Siu' />
+          </div>
+        </>
+      )}
     </div>
   );
 };

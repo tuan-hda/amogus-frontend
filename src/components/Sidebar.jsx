@@ -1,28 +1,65 @@
 import { Button } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiFillHome, AiFillTrophy, AiOutlineHome, AiOutlineTrophy } from "react-icons/ai";
 import { RiUser3Fill, RiUser3Line } from "react-icons/ri";
 import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
-
+import UserContext from "../utils/UserProvider";
+import { RiAdminFill, RiAdminLine } from "react-icons/ri";
 const Sidebar = () => {
   const [index, setIndex] = useState(0);
+  const { user } = useContext(UserContext);
 
-  const menus = [
-    ["Trang chủ", "/", <AiFillHome className='text-black text-xl' />, <AiOutlineHome className='text-black text-xl' />],
-    [
-      "Cá nhân",
-      "/profile",
-      <RiUser3Fill className='text-black text-xl' />,
-      <RiUser3Line className='text-black text-xl' />,
-    ],
-    [
-      "Thành tựu",
-      "/achievement",
-      <AiFillTrophy className='text-black text-xl' />,
-      <AiOutlineTrophy className='text-black text-xl' />,
-    ],
-  ];
+  let menus;
+
+  if (user && user.role === "ADMIN") {
+    menus = [
+      [
+        "Trang chủ",
+        "/",
+        <AiFillHome className='text-black text-xl' />,
+        <AiOutlineHome className='text-black text-xl' />,
+      ],
+      [
+        "Cá nhân",
+        "/profile",
+        <RiUser3Fill className='text-black text-xl' />,
+        <RiUser3Line className='text-black text-xl' />,
+      ],
+      [
+        "Thành tựu",
+        "/achievement",
+        <AiFillTrophy className='text-black text-xl' />,
+        <AiOutlineTrophy className='text-black text-xl' />,
+      ],
+      [
+        "Admin",
+        "/admin",
+        <RiAdminFill className='text-black text-xl' />,
+        <RiAdminLine className='text-black text-xl' />,
+      ],
+    ];
+  } else
+    menus = [
+      [
+        "Trang chủ",
+        "/",
+        <AiFillHome className='text-black text-xl' />,
+        <AiOutlineHome className='text-black text-xl' />,
+      ],
+      [
+        "Cá nhân",
+        "/profile",
+        <RiUser3Fill className='text-black text-xl' />,
+        <RiUser3Line className='text-black text-xl' />,
+      ],
+      [
+        "Thành tựu",
+        "/achievement",
+        <AiFillTrophy className='text-black text-xl' />,
+        <AiOutlineTrophy className='text-black text-xl' />,
+      ],
+    ];
 
   const selectedItem = menus[index];
 

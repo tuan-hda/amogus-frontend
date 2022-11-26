@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { Navbar, Button, Text, Avatar, Dropdown, Input, useTheme } from "@nextui-org/react";
+import React, { useContext } from "react";
+import { Navbar, Button, Text, Input, User, Dropdown } from "@nextui-org/react";
 import { SearchIcon } from "../assets/SearchIcon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
+import { signOut } from "firebase/auth";
+import UserContext from "../utils/UserProvider";
+import { auth } from "../firebase";
 
 const Header = () => {
-  const [currNav, setNav] = useState("1");
+  const navigate = useNavigate();
 
-  const handleNavClick = (key) => {
-    setNav(key);
-  };
+  const { user, setUser } = useContext(UserContext);
 
   return (
     <div className='sticky top-0 z-10'>
@@ -55,7 +56,7 @@ const Header = () => {
                   dflex: "center",
                 },
               }}
-              placeholder='Search...'
+              placeholder='Tìm kiếm...'
             />
           </Navbar.Item>
           {/* <Dropdown placement="bottom-right">
@@ -72,14 +73,42 @@ const Header = () => {
             </Navbar.Item>
           </Dropdown> */}
           <Navbar.Content>
-            <Navbar.Link color='inherit' href='/login'>
-              Login
-            </Navbar.Link>
-            <Navbar.Item>
-              <Button auto flat as={Link} color={"success"} href='/signup'>
-                Sign Up
-              </Button>
-            </Navbar.Item>
+            {user ? (
+              <Dropdown placement='bottom-right'>
+                <Dropdown.Trigger>
+                  <User src={user.photoURL} name={user.name} />
+                </Dropdown.Trigger>
+                <Dropdown.Menu aria-label='Static Actions'>
+                  <Dropdown.Item key='profile'>
+                    <p className='min-w-full' onClick={() => navigate("/profile")}>
+                      Cá nhân
+                    </p>
+                  </Dropdown.Item>
+                  <Dropdown.Item key='logout' color='error'>
+                    <p
+                      className='min-w-full'
+                      onClick={() =>
+                        signOut(auth).then(() => {
+                          navigate("/");
+                          setUser(undefined);
+                        })
+                      }
+                    >
+                      Đăng xuất
+                    </p>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            ) : (
+              <>
+                <Link to='/login'>Đăng nhập</Link>
+                <Navbar.Item>
+                  <Button auto flat as={Link} color={"success"} onClick={() => navigate("/signup")}>
+                    Đăng ký
+                  </Button>
+                </Navbar.Item>
+              </>
+            )}
           </Navbar.Content>
         </Navbar.Content>
       </Navbar>

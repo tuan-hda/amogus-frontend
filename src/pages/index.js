@@ -4,4 +4,5 @@ import Signup from "./Signup";
 import Home from "./Home";
 import Profile from "./Profile";
 import Achievement from "./Achievement";
-export { Login, Signup, ForgetPassword, Home, Profile, Achievement };
+import Admin from "./Admin";
+export { Login, Signup, ForgetPassword, Home, Profile, Achievement, Admin };

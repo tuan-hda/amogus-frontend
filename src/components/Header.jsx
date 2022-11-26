@@ -91,7 +91,7 @@ const Header = () => {
                       className="min-w-full"
                       onClick={() =>
                         signOut(auth).then(() => {
-                          navigate("/");
+                          window.location.href = window.location.origin + "/";
                           setUser(undefined);
                         })
                       }>

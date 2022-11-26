@@ -6,15 +6,14 @@ import EditProfileModal from "../components/modals/EditProfileModal";
 import UserContext from "../utils/UserProvider";
 import { useNavigate } from "react-router-dom";
 
-const Profile = () => {
+const Profile = ({ type }) => {
   const [visible, setVisible] = useState(false);
   const handler = () => setVisible(true);
-
   const { user, loading } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && !user && type !== "other") {
       navigate("/login");
     }
   }, [user, loading]);

@@ -46,10 +46,11 @@ const App = () => {
         <Route path="/forgetpassword" element={<ForgetPassword />} />
       </Route>
       <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/achievement" element={<Achievement />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/profile/*' element={<Profile type='other' />} />
+        <Route path='/achievement' element={<Achievement />} />
+        <Route path='/admin' element={<Admin />} />
       </Route>
     </Routes>
   );

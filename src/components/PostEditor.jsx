@@ -1,17 +1,26 @@
 import { User, Input, Dropdown } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { IoMdClose } from "react-icons/io";
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import PostEditorButtons from "./PostEditorButtons";
-import { storage } from "../firebase";
+import { auth, storage } from "../firebase";
 import classNames from "classnames";
+import { createPost } from "../api/post";
+import compareDates from "../utils/compareDate";
+import { toast } from "react-toastify";
+import UserContext from "../utils/UserProvider";
 
 const PostEditor = ({ role }) => {
   const [image, setImage] = useState();
   const [url, setUrl] = useState();
   const [value, setValue] = useState();
   const [type, setType] = useState("post");
+  const [points, setPoints] = useState(0);
+  const [dateStart, setDateStart] = useState("");
+  const [dateEnd, setDateEnd] = useState("");
+
+  const { user } = useContext(UserContext);
 
   const handleUploadImage = (e) => {
     const img = e.target.files[0];
@@ -20,24 +29,51 @@ const PostEditor = ({ role }) => {
     setUrl(objUrl);
   };
 
+  const doCreatePost = (url) => {
+    auth.currentUser.getIdToken().then((token) => {
+      createPost(token, value, "", type === "activity", "", url ?? "", dateStart, dateEnd, points)
+        .then(() => {
+          console.log("Create post successfully");
+          toast.success("Đăng bài thành công!");
+        })
+        .catch((error) => console.log(error));
+    });
+  };
+
   const handleSubmit = () => {
-    if (!image || !value) {
-      const storageRef = ref(storage, `avatar/${image.lastModified + image.name}`);
+    if (type === "activity") {
+      if (!dateStart || !dateEnd) {
+        toast.error("Cần chọn ngày bắt đầu và kết thúc");
+        return;
+      }
+
+      if (!compareDates(dateStart, dateEnd)) {
+        toast.error("Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc");
+        return;
+      }
+    }
+
+    if (image || value) {
+      if (!image) {
+        doCreatePost();
+        return;
+      }
+
+      const storageRef = ref(storage, `images/${image.lastModified + image.name}`);
 
       uploadBytes(storageRef, image)
-        .then((snapshot) => {
-          console.log("Uploaded image!");
+        .then(() => {
+          getDownloadURL(storageRef).then((url) => doCreatePost(url));
         })
-        .then((err) => console.log(err));
+        .catch((err) => console.log(err));
     }
   };
 
   return (
     <div className='w-[600px] max-w-[100%] rounded-xl py-4 pl-1 pr-4 bg-white'>
       {/* Content */}
-
       <div className='px-2 pt-2 flex items-start'>
-        <User src='https://i.pravatar.cc/150?u=a042581f4e29026704d'></User>
+        <User src={user?.photoURL}></User>
         <div className='flex-1 justify-center -ml-2 '>
           <TextareaAutosize
             value={value}
@@ -64,53 +100,65 @@ const PostEditor = ({ role }) => {
         </div>
       </div>
 
-      <div className='text-xs px-3 mt-4 flex items-center justify-end gap-2'>
-        Loại:{" "}
-        <Dropdown>
-          <Dropdown.Trigger
-            css={{
-              minWidth: 0,
-              width: "100px",
-            }}
-          >
-            <Input
-              aria-label='point'
-              placeholder='Điểm'
-              className='cursor-pointer'
-              color='black'
+      {role === "ADMIN" && (
+        <div className='text-xs px-3 mt-4 flex items-center justify-end gap-2'>
+          Loại:{" "}
+          <Dropdown>
+            <Dropdown.Trigger
               css={{
                 minWidth: 0,
                 width: "100px",
               }}
-              value={type === "post" ? "Bài đăng" : "Hoạt động"}
-              size='sm'
-              readOnly
-            />
-          </Dropdown.Trigger>
-          <Dropdown.Menu aria-label='Static Actions'>
-            <Dropdown.Item key='post' onClick={() => setType("post")}>
-              <p
-                onClick={() => setType("post")}
-                className={classNames(type === "post" && "text-blue-500", "min-w-full")}
-              >
-                Bài đăng
-              </p>
-            </Dropdown.Item>
-            <Dropdown.Item key='activity'>
-              <p
-                onClick={() => setType("activity")}
-                className={classNames(type === "activity" && "text-blue-500", "min-w-full")}
-              >
-                Hoạt động
-              </p>
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+            >
+              <Input
+                aria-label='point'
+                placeholder='Điểm'
+                className='cursor-pointer'
+                color='black'
+                css={{
+                  minWidth: 0,
+                  width: "100px",
+                }}
+                value={type === "post" ? "Bài đăng" : "Hoạt động"}
+                size='sm'
+                readOnly
+              />
+            </Dropdown.Trigger>
+            <Dropdown.Menu aria-label='Static Actions'>
+              <Dropdown.Item key='post' onClick={() => setType("post")}>
+                <p
+                  onClick={() => setType("post")}
+                  className={classNames(type === "post" && "text-blue-500", "min-w-full")}
+                >
+                  Bài đăng
+                </p>
+              </Dropdown.Item>
+              <Dropdown.Item key='activity'>
+                <p
+                  onClick={() => setType("activity")}
+                  className={classNames(type === "activity" && "text-blue-500", "min-w-full")}
+                >
+                  Hoạt động
+                </p>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      )}
 
       {/* Post buttons */}
       <div className='h-4'></div>
-      <PostEditorButtons type={type} handleSubmit={handleSubmit} setImage={handleUploadImage} />
+      <PostEditorButtons
+        type={type}
+        points={points}
+        onPoints={(e) => setPoints(e.target.value)}
+        dateStart={dateStart}
+        dateEnd={dateEnd}
+        onDateEnd={(e) => setDateEnd(e.target.value)}
+        onDateStart={(e) => setDateStart(e.target.value)}
+        handleSubmit={handleSubmit}
+        setImage={handleUploadImage}
+      />
     </div>
   );
 };

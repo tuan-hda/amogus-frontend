@@ -77,6 +77,7 @@ const Login = () => {
               console.log("Sent create user failed");
               console.log(err);
             });
+          navigate("/");
         });
       })
       .catch((err) => {

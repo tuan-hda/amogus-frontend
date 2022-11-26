@@ -4,14 +4,16 @@ import TextareaAutosize from "react-textarea-autosize";
 import { IoMdClose } from "react-icons/io";
 import { ref, uploadBytes } from "firebase/storage";
 import PostEditorButtons from "./PostEditorButtons";
-import { storage } from "../firebase";
+import { auth, storage } from "../firebase";
 import classNames from "classnames";
+import { createPost } from "../api/post";
 
 const PostEditor = ({ role }) => {
   const [image, setImage] = useState();
   const [url, setUrl] = useState();
   const [value, setValue] = useState();
   const [type, setType] = useState("post");
+  const [points, setPoints] = useState(0);
 
   const handleUploadImage = (e) => {
     const img = e.target.files[0];
@@ -27,8 +29,12 @@ const PostEditor = ({ role }) => {
       uploadBytes(storageRef, image)
         .then((snapshot) => {
           console.log("Uploaded image!");
+
+          // auth.currentUser.getIdToken().then(token => {
+          //   createPost(token, value, '', type==='activity', '', url ?? '', dateStart
+          // })
         })
-        .then((err) => console.log(err));
+        .catch((err) => console.log(err));
     }
   };
 

@@ -1,5 +1,5 @@
 import { User, Input, Dropdown } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { IoMdClose } from "react-icons/io";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -8,7 +8,8 @@ import { auth, storage } from "../firebase";
 import classNames from "classnames";
 import { createPost } from "../api/post";
 import compareDates from "../utils/compareDate";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import UserContext from "../utils/UserProvider";
 
 const PostEditor = ({ role }) => {
   const [image, setImage] = useState();
@@ -18,6 +19,8 @@ const PostEditor = ({ role }) => {
   const [points, setPoints] = useState(0);
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
+
+  const { user } = useContext(UserContext);
 
   const handleUploadImage = (e) => {
     const img = e.target.files[0];
@@ -70,7 +73,7 @@ const PostEditor = ({ role }) => {
     <div className='w-[600px] max-w-[100%] rounded-xl py-4 pl-1 pr-4 bg-white'>
       {/* Content */}
       <div className='px-2 pt-2 flex items-start'>
-        <User src='https://i.pravatar.cc/150?u=a042581f4e29026704d'></User>
+        <User src={user?.photoURL}></User>
         <div className='flex-1 justify-center -ml-2 '>
           <TextareaAutosize
             value={value}

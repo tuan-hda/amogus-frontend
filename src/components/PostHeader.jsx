@@ -6,11 +6,11 @@ import { Link } from "react-router-dom";
 import { auth } from "../firebase";
 import { verifyPost } from "../api/post";
 
-const PostHeader = ({ scrutinize, id, name = "", userId = "" }) => {
+const PostHeader = ({ scrutinize, id, image, name = "", userId = "" }) => {
   return (
     <div className='flex justify-between'>
       <Link to={`/profile/${userId}`}>
-        <User src='https://i.pravatar.cc/150?u=a042581f4e29026704d' name={name}></User>
+        <User src={image} name={name}></User>
       </Link>
 
       <Dropdown>

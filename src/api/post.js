@@ -87,3 +87,12 @@ export const getCommentById = (portId) => {
       .catch((error) => reject(error));
   });
 };
+
+export const postComment = (postId, content, userId) => {
+  return new Promise((resolve, reject) => {
+    base
+      .post("/comment", { postId, content, userId })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+};

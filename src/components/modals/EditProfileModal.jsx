@@ -56,7 +56,6 @@ const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
   const updateProfile = async (photoUrl) => {
     if (photoUrl === "") {
       if (ava) photoUrl = ava;
-      else photoUrl=""
     }
     let nameField = value;
     if (nameField==='') {

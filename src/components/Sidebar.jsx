@@ -27,7 +27,7 @@ const Sidebar = () => {
   const selectedItem = menus[index];
 
   return (
-    <div className='space-y-4 sticky top-0'>
+    <div className='space-y-4 sticky top-4'>
       {menus.map(([menuItem, path, icon, icon2], i) => {
         return (
           <SidebarItem

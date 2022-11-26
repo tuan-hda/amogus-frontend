@@ -1,30 +1,8 @@
 import React, { useState } from "react";
-import { Navbar, Button, Link, Text, Avatar, Dropdown, Input, useTheme } from "@nextui-org/react";
+import { Navbar, Button, Text, Avatar, Dropdown, Input, useTheme } from "@nextui-org/react";
 import { SearchIcon } from "../assets/SearchIcon";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
-
-const navItems = [
-  {
-    key: "1",
-    title: "Tiêu đề",
-    href: "#",
-  },
-  {
-    key: "2",
-    title: "Tiêu đề",
-    href: "#",
-  },
-  {
-    key: "3",
-    title: "Tiêu đề",
-    href: "#",
-  },
-  {
-    key: "4",
-    title: "Tiêu đề",
-    href: "#",
-  },
-];
 
 const Header = () => {
   const [currNav, setNav] = useState("1");
@@ -37,20 +15,13 @@ const Header = () => {
     <div className='sticky top-0 z-10'>
       <Navbar isBordered={false} variant='sticky'>
         <Navbar.Brand>
-          <Link href='/'>
+          <Link to='/' className='flex items-center'>
             <img src={logo} alt='Logo' className='w-10 mr-6' />
             <Text b hideIn='xs'>
               GREENSUS
             </Text>
           </Link>
         </Navbar.Brand>
-        <Navbar.Content activeColor={"success"} hideIn='xs' variant={"default"}>
-          {navItems.map((nav, i) => (
-            <Navbar.Link key={i} onClick={() => handleNavClick(nav.key)} href={nav.href} isActive={currNav === nav.key}>
-              {nav.title}
-            </Navbar.Link>
-          ))}
-        </Navbar.Content>
 
         <Navbar.Content
           css={{

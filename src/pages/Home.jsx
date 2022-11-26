@@ -1,23 +1,31 @@
-import { onAuthStateChanged } from "firebase/auth";
-import React from "react";
-import { Post } from "../components";
+import React, { useContext, useEffect, useState } from "react";
 import PostEditor from "../components/PostEditor";
-import { auth } from "../firebase";
+import { Post } from "../components";
+import { getPost } from "../api/post";
+import UserContext from "../utils/UserProvider";
 
 const Home = () => {
+  const [posts, setPosts] = useState([]);
+
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    getPost()
+      .then((data) => {
+        setPosts(data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className='space-y-8 flex flex-col items-center'>
-      <PostEditor role='admin' />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
+      {user && <PostEditor role={user?.role} />}
+
+      {posts.map((p, i) => (
+        <Post post={p} key={i} />
+      ))}
     </div>
   );
 };

@@ -1,10 +1,20 @@
 import { Button, Input } from "@nextui-org/react";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { BiImageAlt } from "react-icons/bi";
 import "react-datepicker/dist/react-datepicker.css";
 import classNames from "classnames";
 
-const PostEditorButtons = ({ setImage, handleSubmit, type }) => {
+const PostEditorButtons = ({
+  setImage,
+  handleSubmit,
+  type,
+  onDateStart,
+  onDateEnd,
+  dateStart,
+  dateEnd,
+  points,
+  onPoints,
+}) => {
   const ref = useRef();
 
   return (
@@ -33,6 +43,8 @@ const PostEditorButtons = ({ setImage, handleSubmit, type }) => {
                 minWidth: 0,
                 width: "100%",
               }}
+              value={points}
+              onChange={onPoints}
               type='number'
             />
           </div>
@@ -46,6 +58,8 @@ const PostEditorButtons = ({ setImage, handleSubmit, type }) => {
                 minWidth: 0,
                 width: "100%",
               }}
+              value={dateStart}
+              onChange={onDateStart}
               type='date'
             />
           </div>
@@ -55,6 +69,8 @@ const PostEditorButtons = ({ setImage, handleSubmit, type }) => {
               aria-label='end-date'
               placeholder='Ngày kết thúc'
               color='black'
+              value={dateEnd}
+              onChange={onDateEnd}
               css={{
                 minWidth: 0,
                 width: "100%",

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Navbar, Button, Link, Text, Avatar, Dropdown, Input, useTheme } from "@nextui-org/react";
+import { Navbar, Button, Text, Avatar, Dropdown, Input, useTheme } from "@nextui-org/react";
 import { SearchIcon } from "../assets/SearchIcon";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 const Header = () => {
@@ -14,7 +15,7 @@ const Header = () => {
     <div className='sticky top-0 z-10'>
       <Navbar isBordered={false} variant='sticky'>
         <Navbar.Brand>
-          <Link href='/'>
+          <Link to='/' className='flex items-center'>
             <img src={logo} alt='Logo' className='w-10 mr-6' />
             <Text b hideIn='xs'>
               GREENSUS

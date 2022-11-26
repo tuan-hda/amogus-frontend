@@ -11,7 +11,7 @@ const PostEditor = ({ role }) => {
   const [image, setImage] = useState();
   const [url, setUrl] = useState();
   const [value, setValue] = useState();
-  const [type, setType] = useState("Bài đăng");
+  const [type, setType] = useState("post");
 
   const handleUploadImage = (e) => {
     const img = e.target.files[0];

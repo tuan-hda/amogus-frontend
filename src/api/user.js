@@ -23,29 +23,26 @@ const createUser = (token, email, name) => {
 export const getProfile = (token) => {
   return new Promise((resolve, reject) => {
     base
-      .get(
-        "/user/profile",
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
+      .get("/user/profile", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
       .then((response) => resolve(response))
       .catch((error) => reject(error));
   });
-}
+};
 
-export const editProfile = (token,name,about,address,ava) => {
+export const editProfile = (token, name, ava, about = "", address = "") => {
   return new Promise((resolve, reject) => {
     base
-      .post(
+      .put(
         "/user/editProfile",
         {
           name,
           about,
           address,
-          ava
+          ava,
         },
         {
           headers: {
@@ -56,6 +53,6 @@ export const editProfile = (token,name,about,address,ava) => {
       .then((response) => resolve(response))
       .catch((error) => reject(error));
   });
-}
+};
 
 export default createUser;

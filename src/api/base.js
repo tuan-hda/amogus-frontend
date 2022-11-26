@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const appApi = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: "https://amogus-guh.herokuapp.com/api",
 });
 
 export default appApi;

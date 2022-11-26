@@ -1,24 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Button,
   Text,
   Input,
-  Textarea,
+  useInput,
+  Loading,
 } from "@nextui-org/react";
 import { storage } from "../../firebase";
-import { v4 } from "uuid";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { TbCameraPlus } from "react-icons/tb";
+import { editProfile } from "../../api/user";
+import { auth } from "../../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
-const EditProfileModal = ({ visible, closeHandler }) => {
+const EditProfileModal = ({ visible, closeHandler, name, ava }) => {
   // Store upload image of user temporarily
   const [image, setImage] = useState();
   const [detail, setDetail] = useState({
     name: "",
-    about: "",
-    address: "",
     ava: "",
   });
+  const [loading, setLoading] = useState(false);
+  const { value, reset, bindings } = useInput("");
 
   // Handle when user update photo
   const handlePhotoChange = (e) => {
@@ -28,65 +32,50 @@ const EditProfileModal = ({ visible, closeHandler }) => {
       if (reader.readyState === 2) {
         setDetail({
           ...detail,
-          photo: reader.result,
+          ava: reader.result,
         });
       }
     };
     reader.readAsDataURL(e.target.files[0]);
-    console.log(reader.result)
+    console.log(reader.result);
   };
 
   const handleUploadImage = () => {
-    // Generate a random id to make sure images' name are not duplicate
-    const imageName = v4();
-    // Get extension of image (jpg/png)
-    const imageExt = image.name.split(".").pop();
-    const name = imageName + "." + imageExt;
-    const task = storage.ref(`images/${name}`).put(image);
-    task.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("images")
-          .child(name)
-          .getDownloadURL()
-          .then((url) => {
-            setDetail((previousState) => ({
-              ...previousState,
-              photo: url,
-            }));
-            updateProfile(url);
-          });
-      }
+    const storageRef = ref(
+      storage,
+      `avatar/${image.lastModified + image.name}`
     );
+
+    uploadBytes(storageRef, image)
+      .then((snapshot) => {
+        getDownloadURL(storageRef).then((url) => updateProfile(url));
+      })
+      .then((err) => console.log(err));
   };
 
   const updateProfile = async (photoUrl) => {
     try {
-      //   const token = await currentUser.getIdToken()
-      //   await currentUser.updateProfile({
-      //     displayName: detail.name
-      //   })
-      //   await api.put(
-      //     routes.EDIT_PROFILE,
-      //     routes.getEditProfileBody(
-      //       1,
-      //       detail.name,
-      //       detail.dob,
-      //       detail.phone,
-      //       detail.gender,
-      //       photoUrl,
-      //       detail.address,
-      //       detail.province,
-      //       detail.district,
-      //       detail.ward
-      //     ),
-      //     routes.getAccessTokenHeader(token)
-      //   )
+      onAuthStateChanged(auth, (userCredential) => {
+        if (userCredential) {
+          auth.currentUser.getIdToken().then((token) => {
+            editProfile(token, value, photoUrl)
+              .then((result) => {
+                // setUser({
+                //   ...auth.currentUser,
+                //   ...result.data[0],
+                // });
+              })
+              .catch((error) => console.log(error))
+              .finally(() => {
+                closeHandler();
+                setLoading(false);
+              });
+          });
+        } else {
+          console.log("Not signed in");
+          setLoading(false);
+        }
+      });
     } catch (err) {
       if (err.response) {
         console.log(err.response.data);
@@ -96,109 +85,122 @@ const EditProfileModal = ({ visible, closeHandler }) => {
         console.log(err.message);
       }
     } finally {
-      //   setLoadsing(false)
+      setLoading(false);
     }
   };
 
-  const handleSubmit = e => {
-    // setLoading(true)
-    e.preventDefault()
-    if (image) handleUploadImage()
-    else updateProfile(detail.photo)
-  }
+  const handleSubmit = (e) => {
+    setLoading(true);
+    if (image) handleUploadImage();
+    else updateProfile(detail.ava);
+  };
 
+  useEffect(() => {
+    console.log(name);
+  }, []);
 
   return (
     <Modal
       width="600px"
+      height
       closeButton
       aria-labelledby="modal-title"
       open={visible}
-      onClose={closeHandler}
-    >
-      <Modal.Header>
-        <Text id="modal-title" b size={18}>
-          Chỉnh sửa hồ sơ
-        </Text>
-      </Modal.Header>
-      <Modal.Body>
-        <div
-          className={`relative flex justify-center items-center w-[160px] mx-auto`}
-        >
-          <img
-            src={
-              detail.photo
-                ? detail.photo
-                : "https://kenh14cdn.com/thumb_w/660/203336854389633024/2022/9/24/tumblr0a490ad7062f51c33ec0c054255256a2a1922eb2540-1664001587930930202526.jpg"
-            }
-            alt="Avatar"
-            className={`rounded-full aspect-square object-cover mx-auto`}
-          />
-          <>
-            <label
-              htmlFor="photo"
-              className="absolute bg-black opacity-50 hover:bg-black hover:opacity-20 cursor-pointer w-[50px] h-[50px] rounded-full flex justify-center items-center "
-            >
-              <input
-                hidden
-                type="file"
-                onChange={handlePhotoChange}
-                id="photo"
-                accept="image/*"
-              />
-              <TbCameraPlus width={30} color="#ffffff" />
-            </label>
-          </>
+      onClose={closeHandler}>
+      {loading ? (
+        <div className="w-full h-[350px] flex-col items-center mt-[175px]">
+          <Loading />
         </div>
-        <Input
-          label="Tên"
-          clearable
-          bordered
-          fullWidth
-          color="success"
-          size="lg"
-          placeholder="Tên"
-          css={{ $$inputLabelColor: "Black" }}
-          //   contentLeft={<Mail fill="currentColor" />}
-        />
-        <Textarea
-          label="Tiểu sử"
-          clearable
-          bordered
-          fullWidth
-          color="success"
-          size="lg"
-          maxLength={160}
-          placeholder="Tiểu sử"
-          css={{ $$inputLabelColor: "Black" }}
-          //   contentLeft={<Password fill="currentColor" />}
-        />
-        <Input
-          label="Vị trí"
-          clearable
-          bordered
-          fullWidth
-          color="success"
-          size="lg"
-          placeholder="Vị trí"
-          css={{ $$inputLabelColor: "Black" }}
-          //   contentLeft={<Mail fill="currentColor" />}
-        />
-        {/* <Row justify="space-between">
-          <Checkbox>
-            <Text size={14}>Remember me</Text>
-          </Checkbox>
-          <Text size={14}>Forgot password?</Text>
-        </Row> */}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button auto flat color="error" onClick={closeHandler}>
-          Hủy
-        </Button>
-        <Button auto onClick={()=>updateProfile()} css={{ background: "#108944" }}>
-          Lưu
-        </Button>
-      </Modal.Footer>
+      ) : (
+        <div>
+          <Modal.Header>
+            <Text id="modal-title" b size={18}>
+              Chỉnh sửa hồ sơ
+            </Text>
+          </Modal.Header>
+          <Modal.Body>
+            <div
+              className={`relative flex justify-center items-center w-[160px] mx-auto`}>
+              <img
+                src={
+                  detail.ava
+                    ? detail.ava
+                    : "http://cdn.onlinewebfonts.com/svg/img_264570.png"
+                }
+                alt="Avatar"
+                className={`rounded-full aspect-square object-cover mx-auto`}
+              />
+              <>
+                <label
+                  htmlFor="photo"
+                  className="absolute bg-black opacity-50 hover:bg-black hover:opacity-20 cursor-pointer w-[50px] h-[50px] rounded-full flex justify-center items-center ">
+                  <input
+                    hidden
+                    type="file"
+                    onChange={handlePhotoChange}
+                    id="photo"
+                    accept="image/*"
+                  />
+                  <TbCameraPlus width={30} color="#ffffff" />
+                </label>
+              </>
+            </div>
+            <Input
+              {...bindings}
+              initialValue={"alo"}
+              label="Tên"
+              clearable
+              bordered
+              fullWidth
+              color="success"
+              size="lg"
+              placeholder="Tên"
+              css={{ $: "Black" }}
+              //   contentLeft={<Mail fill="currentColor" />}
+            />
+            {/* <Textarea
+            label="Tiểu sử"
+            clearable
+            bordered
+            fullWidth
+            color="success"
+            size="lg"
+            maxLength={160}
+            placeholder="Tiểu sử"
+            css={{ $: "Black" }}
+            //   contentLeft={<Password fill="currentColor" />}
+          />
+          <Input
+            label="Vị trí"
+            clearable
+            bordered
+            fullWidth
+            color="success"
+            size="lg"
+            placeholder="Vị trí"
+            css={{ $: "Black" }}
+            //   contentLeft={<Mail fill="currentColor" />}
+          /> */}
+            {/* <Row justify="space-between">
+            <Checkbox>
+              <Text size={14}>Remember me</Text>
+            </Checkbox>
+            <Text size={14}>Forgot password?</Text>
+          </Row> */}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button auto flat color="error" onClick={closeHandler}>
+              Hủy
+            </Button>
+            <Button
+              auto
+              onClick={() => handleSubmit()}
+              css={{ background: "#108944" }}>
+              Lưu
+            </Button>
+          </Modal.Footer>
+        </div>
+      )}
     </Modal>
   );
 };

@@ -13,12 +13,12 @@ const Header = () => {
   const { user, setUser } = useContext(UserContext);
 
   return (
-    <div className='sticky top-0 z-10'>
-      <Navbar isBordered={false} variant='sticky'>
+    <div className="sticky top-0 z-10">
+      <Navbar isBordered={false} variant="sticky">
         <Navbar.Brand>
-          <Link to='/' className='flex items-center'>
-            <img src={logo} alt='Logo' className='w-10 mr-6' />
-            <Text b hideIn='xs'>
+          <Link to="/" className="flex items-center">
+            <img src={logo} alt="Logo" className="w-10 mr-6" />
+            <Text b hideIn="xs">
               GREENSUS
             </Text>
           </Link>
@@ -30,20 +30,20 @@ const Header = () => {
               w: "100%",
               jc: "space-between",
             },
-          }}
-        >
+          }}>
           <Navbar.Item
             css={{
               "@xsMax": {
                 w: "100%",
                 jc: "center",
               },
-            }}
-          >
+            }}>
             <Input
               clearable
-              aria-label='search'
-              contentLeft={<SearchIcon fill='var(--nextui-colors-accents6)' size={16} />}
+              aria-label="search"
+              contentLeft={
+                <SearchIcon fill="var(--nextui-colors-accents6)" size={16} />
+              }
               contentLeftStyling={false}
               css={{
                 w: "100%",
@@ -56,7 +56,7 @@ const Header = () => {
                   dflex: "center",
                 },
               }}
-              placeholder='Tìm kiếm...'
+              placeholder="Tìm kiếm..."
             />
           </Navbar.Item>
           {/* <Dropdown placement="bottom-right">
@@ -74,26 +74,27 @@ const Header = () => {
           </Dropdown> */}
           <Navbar.Content>
             {user ? (
-              <Dropdown placement='bottom-right'>
+              <Dropdown placement="bottom-right">
                 <Dropdown.Trigger>
-                  <User src={user.photoURL} name={user.name} />
+                  <User src={user.ava} name={user.name} />
                 </Dropdown.Trigger>
-                <Dropdown.Menu aria-label='Static Actions'>
-                  <Dropdown.Item key='profile'>
-                    <p className='min-w-full' onClick={() => navigate("/profile")}>
+                <Dropdown.Menu aria-label="Static Actions">
+                  <Dropdown.Item key="profile">
+                    <p
+                      className="min-w-full"
+                      onClick={() => navigate("/profile")}>
                       Cá nhân
                     </p>
                   </Dropdown.Item>
-                  <Dropdown.Item key='logout' color='error'>
+                  <Dropdown.Item key="logout" color="error">
                     <p
-                      className='min-w-full'
+                      className="min-w-full"
                       onClick={() =>
                         signOut(auth).then(() => {
                           navigate("/");
                           setUser(undefined);
                         })
-                      }
-                    >
+                      }>
                       Đăng xuất
                     </p>
                   </Dropdown.Item>
@@ -101,9 +102,14 @@ const Header = () => {
               </Dropdown>
             ) : (
               <>
-                <Link to='/login'>Đăng nhập</Link>
+                <Link to="/login">Đăng nhập</Link>
                 <Navbar.Item>
-                  <Button auto flat as={Link} color={"success"} onClick={() => navigate("/signup")}>
+                  <Button
+                    auto
+                    flat
+                    as={Link}
+                    color={"success"}
+                    onClick={() => navigate("/signup")}>
                     Đăng ký
                   </Button>
                 </Navbar.Item>

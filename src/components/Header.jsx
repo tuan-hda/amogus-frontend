@@ -9,6 +9,7 @@ import {
   Input,
   useTheme,
 } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 import { SearchIcon } from "../assets/SearchIcon";
 import logo from "../assets/logo.png";
 
@@ -36,11 +37,16 @@ const navItems = [
 ];
 
 const Header = () => {
+  const navigate = useNavigate();
   const [currNav, setNav] = useState("1");
-  const currentUser = true;
+  const currentUser = true; 
 
   const handleNavClick = (key) => {
     setNav(key);
+  };
+
+  const handleDropDownClick = (actionKey) => {
+    navigate('/'+actionKey);
   };
 
   return (
@@ -123,10 +129,10 @@ const Header = () => {
               <Dropdown.Menu
                 aria-label="User menu actions"
                 color="success"
-                onAction={(actionKey) => console.log({ actionKey })}
+                onAction={(actionKey) => handleDropDownClick(actionKey)}
                 disabledKeys={["info"]}
               >
-                <Dropdown.Item key="info"  css={{ height: "$18" }} >
+                <Dropdown.Item key="info" css={{ height: "$18" }}>
                   <Text b color="inherit" css={{ d: "flex" }}>
                     Đã đăng nhập với
                   </Text>

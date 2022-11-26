@@ -6,6 +6,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       </Route>
       <Route element={<MainLayout/>}>
         <Route path="/" element={<Home/>}/>
+        <Route path="/profile" element={<Profile/>}/>
       </Route>
     </Routes>
   );

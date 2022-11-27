@@ -60,6 +60,8 @@ const Post = ({ scrutinize, post, checkin }) => {
     }
   }, []);
 
+  console.log(scrutinize);
+
   return (
     <div className='w-[600px] max-w-[100%] rounded-xl py-4 pl-1 pr-4 bg-white'>
       {/* Post header */}
@@ -113,32 +115,23 @@ const Post = ({ scrutinize, post, checkin }) => {
         ))}
 
       {/* Post buttons */}
-      {!scrutinize && (
-        <>
-          <PostButtons shares={shares} likes={likes} id={_id} isActivity={post.post.isActivity} />
 
-          <div className='pt-1'>
-            {user2 && <Comment postId={_id} fetchComment={fetchComment} />}
+      <PostButtons shares={shares} likes={likes} id={_id} isActivity={post.post.isActivity} />
 
-            {comments.length !== 0 && (
-              <div className='ml-4 mt-1 cursor-pointer text-sm' onClick={() => setShowComment(!showComment)}>
-                {showComment ? "Ẩn tất cả bình luận" : "Xem tất cả bình luận"}
-              </div>
-            )}
+      <div className='pt-1'>
+        {user2 && <Comment postId={_id} fetchComment={fetchComment} />}
 
-            {showComment &&
-              comments.map((cmt, index) => (
-                <Comment
-                  type='text'
-                  name={cmt.user.name}
-                  image={cmt.user.ava}
-                  value={cmt.comment.content}
-                  key={index}
-                />
-              ))}
+        {comments.length !== 0 && (
+          <div className='ml-4 mt-1 cursor-pointer text-sm' onClick={() => setShowComment(!showComment)}>
+            {showComment ? "Ẩn tất cả bình luận" : "Xem tất cả bình luận"}
           </div>
-        </>
-      )}
+        )}
+
+        {showComment &&
+          comments.map((cmt, index) => (
+            <Comment type='text' name={cmt.user.name} image={cmt.user.ava} value={cmt.comment.content} key={index} />
+          ))}
+      </div>
     </div>
   );
 };

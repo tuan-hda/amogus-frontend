@@ -6,13 +6,16 @@ import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../utils/UserProvider";
 import { RiAdminFill, RiAdminLine } from "react-icons/ri";
+import { AiOutlineCheckCircle, AiFillCheckCircle } from "react-icons/ai";
 
 const getIndex = () => {
   const path = window.location.pathname;
 
   if (path.includes("/profile")) return 1;
   if (path.includes("/achievement")) return 2;
-  if (path.includes("/admin")) return 3;
+  if (path.includes("/approve")) return 3;
+  if (path.includes("/check")) return 4;
+
   return 0;
 };
 
@@ -56,16 +59,28 @@ const Sidebar = () => {
       })}
 
       {user && user.role === "ADMIN" && (
-        <SidebarItem
-          path={"/admin"}
-          index={index}
-          itemIndex={3}
-          onClick={() => setIndex(3)}
-          icon={<RiAdminFill className='text-black text-xl' />}
-          icon2={<RiAdminLine className='text-black text-xl' />}
-        >
-          Admin
-        </SidebarItem>
+        <>
+          <SidebarItem
+            path={"/approve"}
+            index={index}
+            itemIndex={3}
+            onClick={() => setIndex(3)}
+            icon={<RiAdminFill className='text-black text-xl' />}
+            icon2={<RiAdminLine className='text-black text-xl' />}
+          >
+            Duyệt bài
+          </SidebarItem>
+          <SidebarItem
+            path={"/check"}
+            index={index}
+            itemIndex={4}
+            onClick={() => setIndex(4)}
+            icon={<AiFillCheckCircle className='text-black text-xl' />}
+            icon2={<AiOutlineCheckCircle className='text-black text-xl' />}
+          >
+            Điểm danh
+          </SidebarItem>
+        </>
       )}
     </div>
   );

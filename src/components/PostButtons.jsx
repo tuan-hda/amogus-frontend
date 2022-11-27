@@ -4,11 +4,12 @@ import { AiFillHeart, AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
 import { IoHandRightSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from "react-share";
-import { joinActivity } from "../api/post";
+import { doLike, doShare, joinActivity } from "../api/post";
 import { auth } from "../firebase";
 import UserContext from "../utils/UserProvider";
 
-const PostButtons = ({ shares, likes, id }) => {
+const PostButtons = ({ shares, likes, id, isActivity }) => {
+  console.log("🚀 ~ file: PostButtons.jsx ~ line 12 ~ PostButtons ~ shares", shares);
   const [liked, setLiked] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
 
@@ -23,12 +24,26 @@ const PostButtons = ({ shares, likes, id }) => {
     clickFunc();
   };
 
+  const handleShare = (e) => {
+    doShare(id, auth.currentUser.uid)
+      .then(() => console.log("Shared successfully"))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className='flex gap-4 overflow-hidden pr-4 pl-2 py-1'>
       <div className='flex items-center'>
         <Tooltip content={liked ? "Bỏ quan tâm" : "Quan tâm"} color='invert'>
           <Button
-            onClick={() => handleClick(() => setLiked(!liked))}
+            onClick={() =>
+              handleClick(() => {
+                auth.currentUser.getIdToken().then((token) =>
+                  doLike(token)
+                    .then(() => console.log("Liked"))
+                    .catch((err) => console.log(err))
+                );
+              })
+            }
             color='error'
             rounded
             css={{
@@ -39,7 +54,7 @@ const PostButtons = ({ shares, likes, id }) => {
           />
         </Tooltip>
 
-        <span>{likes}</span>
+        <span>{likes + liked}</span>
       </div>
 
       <div className='flex items-center'>
@@ -62,6 +77,7 @@ const PostButtons = ({ shares, likes, id }) => {
                 url={"https://dev.to/pccprint/10-react-rich-text-editors-1hh5"}
                 hashtag={"#greensus"}
                 className='flex items-center gap-4'
+                onClick={handleShare}
               >
                 <FacebookIcon size={24} round /> Qua Facebook
               </FacebookShareButton>
@@ -71,6 +87,7 @@ const PostButtons = ({ shares, likes, id }) => {
               <TwitterShareButton
                 url={"https://facebook.com/"}
                 hashtag={"#greensus"}
+                onClick={handleShare}
                 className='flex items-center gap-4'
               >
                 <TwitterIcon size={24} round /> Qua Twitter
@@ -82,30 +99,32 @@ const PostButtons = ({ shares, likes, id }) => {
         <span>{shares}</span>
       </div>
 
-      <Button
-        className='ml-auto'
-        color='success'
-        css={{
-          minWidth: "140px",
-        }}
-        bordered={enrolled}
-        icon={<IoHandRightSharp />}
-        onClick={() => {
-          handleClick(() => {
-            if (enrolled) {
-              return;
-            }
-            auth.currentUser.getIdToken().then((token) => {
-              joinActivity(token, id).then(() => {
-                console.log("Joined activity successfully");
-                setEnrolled(true);
+      {isActivity && (
+        <Button
+          className='ml-auto'
+          color='success'
+          css={{
+            minWidth: "140px",
+          }}
+          bordered={enrolled}
+          icon={<IoHandRightSharp />}
+          onClick={() => {
+            handleClick(() => {
+              if (enrolled) {
+                return;
+              }
+              auth.currentUser.getIdToken().then((token) => {
+                joinActivity(token, id).then(() => {
+                  console.log("Joined activity successfully");
+                  setEnrolled(true);
+                });
               });
             });
-          });
-        }}
-      >
-        <span className='ml-8 w-fullk'>{enrolled ? "Huỷ tham gia" : "Tham gia"}</span>
-      </Button>
+          }}
+        >
+          <span className='ml-8 w-fullk'>{enrolled ? "Huỷ tham gia" : "Tham gia"}</span>
+        </Button>
+      )}
     </div>
   );
 };

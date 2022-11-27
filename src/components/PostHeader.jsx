@@ -7,6 +7,8 @@ import { auth } from "../firebase";
 import { verifyPost } from "../api/post";
 
 const PostHeader = ({ scrutinize, id, image, name = "", userId = "" }) => {
+  console.log(scrutinize);
+
   return (
     <div className='flex justify-between'>
       <Link to={`/profile/${userId}`}>

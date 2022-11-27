@@ -38,7 +38,7 @@ export const getAdminPost = () => {
 export const verifyPost = (token, id, verify) => {
   return new Promise((resolve, reject) => {
     base
-      .post(
+      .put(
         "/post/verify",
         { verify },
         {
@@ -92,6 +92,61 @@ export const postComment = (postId, content, userId) => {
   return new Promise((resolve, reject) => {
     base
       .post("/comment", { postId, content, userId })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+};
+
+export const getActivity = (postId) => {
+  return new Promise((resolve, reject) => {
+    base
+      .get("/activity", { params: { postId } })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+};
+
+export const checkIn = (token, id, userId) => {
+  return new Promise((resolve, reject) => {
+    base
+      .post(
+        "/activity/join",
+        { userId },
+        {
+          headers: {
+            params: {
+              id,
+            },
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+};
+
+export const doLike = (token) => {
+  return new Promise((resolve, reject) => {
+    base
+      .post(
+        "/like",
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+};
+
+export const doShare = (postId, userId) => {
+  return new Promise((resolve, reject) => {
+    base
+      .post("/share", { postId, userId })
       .then((response) => resolve(response))
       .catch((error) => reject(error));
   });

@@ -6,6 +6,7 @@ import { auth } from "./firebase";
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
 import { Achievement, Admin, Home, Profile } from "./pages";
+import Check from "./pages/Check";
 import ForgetPassword from "./pages/ForgetPassword";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -49,7 +50,8 @@ const App = () => {
         <Route path='/profile' element={<Profile />} />
         <Route path='/profile/*' element={<Profile type='other' />} />
         <Route path='/achievement' element={<Achievement />} />
-        <Route path='/admin' element={<Admin />} />
+        <Route path='/approve' element={<Admin />} />
+        <Route path='/check' element={<Check />} />
       </Route>
     </Routes>
   );

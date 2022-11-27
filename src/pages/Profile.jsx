@@ -24,23 +24,28 @@ const Profile = ({ type }) => {
   };
 
   return (
-    <div className='bg-white w-[700px] pb-[80px] rounded-xl  mx-auto'>
-      <EditProfileModal visible={visible} closeHandler={() => closeHandler()} />
-      <div className='relative'>
+    <div className="bg-white w-[700px] pb-[80px] rounded-xl  mx-auto">
+      <EditProfileModal
+        ava={user?.ava}
+        name={user?.name}
+        visible={visible}
+        closeHandler={() => closeHandler()}
+      />
+      <div className="relative">
         <img
-          src='https://marketplace.canva.com/EAE8OiJn5Uw/1/0/1600w/canva-light-green-orange-illustrative-environment-facebook-cover-wJsZ4lTGp4M.jpg'
-          alt='Cover'
-          className='rounded-t-xl object-cover object-center h-[250px] w-full'
+          src="https://marketplace.canva.com/EAE8OiJn5Uw/1/0/1600w/canva-light-green-orange-illustrative-environment-facebook-cover-wJsZ4lTGp4M.jpg"
+          alt="Cover"
+          className="rounded-t-xl object-cover object-center h-[250px] w-full"
         />
         <Avatar
-          src={user?.photoURL || "http://cdn.onlinewebfonts.com/svg/img_264570.png"}
+          src={user?.ava || "http://cdn.onlinewebfonts.com/svg/img_264570.png"}
           custom={"w-[180px] absolute -bottom-[95px] left-6"}
         />
       </div>
-      <div className='flex mt-4 ml-[220px] items-center'>
+      <div className="flex mt-4 ml-[220px] items-center">
         <div>
-          <h2 className='text-[18px] mb-0'>{user?.name}</h2>
-          <p className='text-[14px] text-gray-600'>{user?.email}</p>
+          <h2 className="text-[18px] mb-0">{user?.name}</h2>
+          <p className="text-[14px] text-gray-600">{user?.email}</p>
         </div>
         <Button
           bordered
@@ -48,8 +53,7 @@ const Profile = ({ type }) => {
           onClick={() => handler()}
           css={{ minWidth: "180px" }}
           icon={<AiOutlineEdit />}
-          className='mr-6 ml-auto'
-        >
+          className="mr-6 ml-auto">
           Chỉnh sửa hồ sơ
         </Button>
       </div>
